@@ -1,38 +1,23 @@
-import * as React from "react"
 import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
+  ChakraProvider, theme
 } from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { Chart } from "./features/chart"
+import './layout/global.css';
+const initialData = [
+	{ time: '2018-12-22', value: 32.51 },
+	{ time: '2018-12-23', value: 31.11 },
+	{ time: '2018-12-24', value: 27.02 },
+	{ time: '2018-12-25', value: 27.32 },
+	{ time: '2018-12-26', value: 25.17 },
+	{ time: '2018-12-27', value: 28.89 },
+	{ time: '2018-12-28', value: 25.46 },
+	{ time: '2018-12-29', value: 23.92 },
+	{ time: '2018-12-30', value: 22.68 },
+	{ time: '2018-12-31', value: 22.67 },
+];
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
+    <Chart data={initialData} />
   </ChakraProvider>
 )
