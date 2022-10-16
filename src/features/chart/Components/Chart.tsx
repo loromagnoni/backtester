@@ -1,11 +1,8 @@
 import { Box } from '@chakra-ui/react';
-import { ColorType, createChart, CrosshairMode } from 'lightweight-charts';
-import { useEffect, useRef } from 'react';
-import { priceData } from '../data/priceData';
-
-type ChartProps = {
-    data: { time: string; value: number }[];
-};
+import { CrosshairMode } from 'lightweight-charts';
+import { useRef } from 'react';
+import { useChart, usePriceData } from '../hooks';
+import { useFixedSerieProvider } from '../hooks/fixedSerieProvider';
 
 const colors = {
     background: '#253248',
@@ -35,37 +32,9 @@ const colors = {
     },
 };
 
-export const Chart = (props: ChartProps) => {
+export const Chart = () => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const handleResize = () => {
-            chart.applyOptions({
-                width: chartContainerRef.current!.clientWidth,
-                height: chartContainerRef.current!.clientHeight,
-                ...colors,
-            });
-        };
-        const chart = createChart(chartContainerRef.current!, {
-            layout: {
-                background: { type: ColorType.Solid, color: colors.background },
-                textColor: colors.text,
-            },
-            width: chartContainerRef.current!.clientWidth,
-            height: chartContainerRef.current!.clientHeight,
-        });
-        chart.timeScale().fitContent();
-
-        const newSeries = chart.addCandlestickSeries(colors);
-        newSeries.setData(priceData);
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            chart.remove();
-        };
-    }, []);
-
+    const serieProvider = useFixedSerieProvider(colors, usePriceData());
+    useChart(chartContainerRef, colors, serieProvider);
     return <Box ref={chartContainerRef} h={'full'}></Box>;
 };

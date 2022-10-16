@@ -1,4 +1,7 @@
-export const priceData = [
+export const usePriceData = () => priceData;
+
+
+ const priceData = [
     {
       time: '2018-10-19',
       open: 180.34,
