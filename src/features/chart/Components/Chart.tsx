@@ -36,5 +36,5 @@ export const Chart = () => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const serieProvider = useFixedSerieProvider(colors, usePriceData());
     useChart(chartContainerRef, colors, serieProvider);
-    return <Box ref={chartContainerRef} h={'full'}></Box>;
+    return <Box ref={chartContainerRef} w="full"></Box>;
 };
