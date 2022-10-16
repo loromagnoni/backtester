@@ -21,6 +21,7 @@ export const useChart = (ref:React.RefObject<HTMLDivElement>, colors:any, serieP
             },
             width: ref.current!.clientWidth,
             height: ref.current!.clientHeight,
+            ...colors
         });
         chart.timeScale().fitContent();
         serieProvider(chart);

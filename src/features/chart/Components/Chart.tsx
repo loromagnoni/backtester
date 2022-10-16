@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { CrosshairMode } from 'lightweight-charts';
+import { CrosshairMode, ISeriesApi } from 'lightweight-charts';
 import { useRef } from 'react';
 import { useChart, usePriceData } from '../hooks';
 import { useFixedSerieProvider } from '../hooks/fixedSerieProvider';
@@ -32,9 +32,16 @@ const colors = {
     },
 };
 
-export const Chart = () => {
+export type CandleStickSerieData = Parameters<
+    ISeriesApi<'Candlestick'>['setData']
+>[0];
+
+type ChartProps = { data: CandleStickSerieData };
+
+export const Chart = ({ data }: ChartProps) => {
+    console.log(data);
     const chartContainerRef = useRef<HTMLDivElement>(null);
-    const serieProvider = useFixedSerieProvider(colors, usePriceData());
+    const serieProvider = useFixedSerieProvider(colors, data);
     useChart(chartContainerRef, colors, serieProvider);
     return <Box ref={chartContainerRef} w="full"></Box>;
 };
