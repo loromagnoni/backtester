@@ -9,12 +9,15 @@ export const useChart = (ref:React.RefObject<HTMLDivElement>, colors:any, serieP
     useEffect(() => {
         const handleResize = () => {
             chart.applyOptions({
+            
                 width: ref.current!.clientWidth,
                 height: ref.current!.clientHeight,
                 ...colors,
             });
         };
         const chart = createChart(ref.current!, {
+      
+      
             layout: {
                 background: { type: ColorType.Solid, color: colors.background },
                 textColor: colors.text,
