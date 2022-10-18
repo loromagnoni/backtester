@@ -7,6 +7,7 @@ export const AssetSelector = () => {
     const { setSelectedAsset } = useAssetSelector();
     return (
         <Select
+            minW={40}
             variant={'outline'}
             onChange={(e) => {
                 setSelectedAsset(findAssetByTicker(e.target.value)!);
