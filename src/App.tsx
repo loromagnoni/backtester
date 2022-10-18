@@ -6,6 +6,7 @@ import { HomeLayout } from './layout/HomeLayout';
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
+            networkMode: 'always',
             refetchOnWindowFocus: false,
         },
     },
