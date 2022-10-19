@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import { CrosshairMode, ISeriesApi } from 'lightweight-charts';
 import { useRef } from 'react';
+import { useReplaySerieProvider } from '../../replay/hooks/useReplaySerieProvider';
 import { useChart } from '../hooks';
 import { useFixedSerieProvider } from '../hooks/fixedSerieProvider';
 
@@ -47,7 +48,7 @@ type ChartProps = { data: CandleStickSerieData };
 
 export const Chart = ({ data }: ChartProps) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
-    const serieProvider = useFixedSerieProvider(colors, data);
+    const serieProvider = useReplaySerieProvider(colors, data);
     useChart(chartContainerRef, colors, serieProvider);
     return <Box ref={chartContainerRef} w="full"></Box>;
 };

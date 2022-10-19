@@ -1,16 +1,20 @@
-import { ISeriesApi } from "lightweight-charts";
-import { useRef } from "react";
-
+import { useEffect } from 'react';
+import { useReplayCallback } from './useReplayCallback';
+import { useReplayPlayStatus } from './useReplayPlayStatus';
+import { useReplayVelocity } from './useReplayVelocity';
 
 export const useTimeReplay = () => {
-    console.log('called replay');
-    const index = useRef(0);
-    const setTimeSerieToReplay = (data:any, serie: ISeriesApi<"Candlestick">) => {
-        serie.setData([]);
-        setInterval(()=>{
-            serie.update(data[index.current % data.length]);
-           index.current++;
-        }, 1000);
-    };
-    return setTimeSerieToReplay;
-}
+    const [isPlaying, _] = useReplayPlayStatus();
+    const [callbackContainer, __] = useReplayCallback();
+    const [velocity, ___] = useReplayVelocity();
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (isPlaying && velocity !== 0) {
+            interval = setInterval(() => {
+                callbackContainer.callback();
+            }, 1000 / velocity);
+        }
+        return () => clearInterval(interval);
+    }, [callbackContainer, isPlaying, velocity]);
+};
