@@ -1,4 +1,6 @@
 import { CandlestickData, OhlcData, UTCTimestamp } from 'lightweight-charts';
+import { useMemo } from 'react';
+import { useLogDepChange } from '../../../core/debug/useLogDepChange';
 import { CandleStickSerieData } from '../../chart';
 import { useSelectedTimeframe } from './useSelectedTimeframe';
 
@@ -21,9 +23,13 @@ const applyTimeframe = (data: CandlestickData[], minutesToGroup: number) => {
 
 export const useTimeframeProxy = (serie: CandleStickSerieData) => {
     const [selectedTimeframe, _] = useSelectedTimeframe();
-    const converted = applyTimeframe(
-        serie as CandlestickData[],
-        selectedTimeframe.minutes
+    const converted = useMemo(
+        () =>
+            applyTimeframe(
+                serie as CandlestickData[],
+                selectedTimeframe.minutes
+            ),
+        [selectedTimeframe.minutes, serie]
     );
     return converted;
 };

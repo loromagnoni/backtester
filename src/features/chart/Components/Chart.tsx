@@ -1,11 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import { CrosshairMode, ISeriesApi } from 'lightweight-charts';
 import { useRef } from 'react';
-import { useReplaySerieProvider } from '../../replay/hooks/useReplaySerieProvider';
-import { useChart } from '../hooks';
-import { useFixedSerieProvider } from '../hooks/fixedSerieProvider';
+import { SerieProvider, useChart } from '../hooks';
 
-const colors = {
+export const colors = {
     priceFormat: {
         type: 'price' as const,
         precision: 6,
@@ -44,11 +42,10 @@ export type CandleStickSerieData = Parameters<
     ISeriesApi<'Candlestick'>['setData']
 >[0];
 
-type ChartProps = { data: CandleStickSerieData };
+type ChartProps = { serieProvider: SerieProvider };
 
-export const Chart = ({ data }: ChartProps) => {
+export const Chart = ({ serieProvider }: ChartProps) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
-    const serieProvider = useReplaySerieProvider(colors, data);
     useChart(chartContainerRef, colors, serieProvider);
     return <Box ref={chartContainerRef} w="full"></Box>;
 };

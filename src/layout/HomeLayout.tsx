@@ -1,14 +1,14 @@
 import { Flex, HStack, VStack } from '@chakra-ui/react';
 import { AssetSelector } from '../features/assetSelector/components/AssetSelector';
 import { useSelectedAssetSerie } from '../features/assetSelector/hooks/useSelectedAssetSerie';
-import { Chart } from '../features/chart';
+import { Chart, colors } from '../features/chart';
 import { ReplayControls } from '../features/replay/components/ReplayControls';
+import { useReplaySerieProvider } from '../features/replay/hooks/useReplaySerieProvider';
 import { TimeframeSelector } from '../features/timeframeSelector/components/TimeframeSelector';
+import { useSelectedTimeframe } from '../features/timeframeSelector/hooks/useSelectedTimeframe';
 import { useTimeframeProxy } from '../features/timeframeSelector/hooks/useTimeframeProxy';
 
 export const HomeLayout = () => {
-    const [selectedAssetSerie, _] = useSelectedAssetSerie();
-    const timeframeAdapted = useTimeframeProxy(selectedAssetSerie);
     return (
         <VStack h="full">
             <HStack justifyContent="start" w="full" p={2}>
@@ -23,8 +23,19 @@ export const HomeLayout = () => {
                 </Flex>
             </HStack>
             <Flex flex={1} w="full">
-                <Chart data={timeframeAdapted} />
+                <FilledChart />
             </Flex>
         </VStack>
     );
+};
+
+const FilledChart = () => {
+    const [selectedAssetSerie] = useSelectedAssetSerie();
+    const [selectedTimeframe] = useSelectedTimeframe();
+    const serieProvider = useReplaySerieProvider(
+        colors,
+        selectedAssetSerie,
+        selectedTimeframe
+    );
+    return <Chart serieProvider={serieProvider} />;
 };
