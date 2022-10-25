@@ -1,4 +1,6 @@
-import { generateSharedStateHook } from "../../../core/generateSharedStateHook";
-import { CandleStickSerieData } from "../../chart";
+import { CandlestickData } from 'lightweight-charts';
+import { generateSharedStateHook } from '../../../core/generateSharedStateHook';
 
-export const useSelectedAssetSerie = generateSharedStateHook<CandleStickSerieData>([]);
+export const useSelectedAssetSerie = generateSharedStateHook<CandlestickData[]>(
+    []
+);

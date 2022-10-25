@@ -6,7 +6,6 @@ import { ReplayControls } from '../features/replay/components/ReplayControls';
 import { useReplaySerieProvider } from '../features/replay/hooks/useReplaySerieProvider';
 import { TimeframeSelector } from '../features/timeframeSelector/components/TimeframeSelector';
 import { useSelectedTimeframe } from '../features/timeframeSelector/hooks/useSelectedTimeframe';
-import { useTimeframeProxy } from '../features/timeframeSelector/hooks/useTimeframeProxy';
 
 export const HomeLayout = () => {
     return (
