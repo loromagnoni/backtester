@@ -3,8 +3,6 @@ export type Timeframe = {
     minutes: number;
 };
 
-export const DEFAULT_TIMEFRAME: Timeframe = { label: 'M1', minutes: 1 };
-
 export const timeframes: Timeframe[] = [
     {
         label: 'D',
@@ -13,5 +11,5 @@ export const timeframes: Timeframe[] = [
     { label: 'H4', minutes: 240 },
     { label: 'H1', minutes: 60 },
     { label: 'M5', minutes: 5 },
-    DEFAULT_TIMEFRAME,
+    { label: 'M1', minutes: 1 },
 ];

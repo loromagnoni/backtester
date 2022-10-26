@@ -11,7 +11,7 @@ export const AssetSelector = () => {
             minW={40}
             variant={'outline'}
             onChange={(e) => {
-                setSelectedAsset(findAssetByTicker(e.target.value)!);
+                setSelectedAsset(findAssetByTicker(e.target.value));
             }}
         >
             {tickers.map((ticker) => (

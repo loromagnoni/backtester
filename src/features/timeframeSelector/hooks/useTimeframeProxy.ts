@@ -4,9 +4,10 @@ import { Timeframe } from '../data/timeframes';
 
 export const applyTimeframe = (
     data: CandlestickData[],
-    timeframe: Timeframe
+    timeframe?: Timeframe
 ) => {
     const result: CandleStickSerieData = [];
+    if (!timeframe) return result;
     let candle: Partial<OhlcData> = {};
     for (let i = 0; i < data.length; i++) {
         candle.time = data[i].time;
