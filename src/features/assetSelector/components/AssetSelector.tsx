@@ -7,6 +7,7 @@ export const AssetSelector = () => {
     const { setSelectedAsset } = useAssetSelector();
     return (
         <Select
+            placeholder="Select asset"
             minW={40}
             variant={'outline'}
             onChange={(e) => {

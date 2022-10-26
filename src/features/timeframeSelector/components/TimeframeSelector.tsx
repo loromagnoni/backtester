@@ -7,7 +7,8 @@ export const TimeframeSelector = () => {
     const [_, setSelectedTimeframe] = useSelectedTimeframe();
     return (
         <Select
-            minW={20}
+            placeholder="Select timeframe"
+            minW={60}
             variant={'outline'}
             onChange={(e) =>
                 setSelectedTimeframe(findTimeframeByLabel(e.target.value)!)
