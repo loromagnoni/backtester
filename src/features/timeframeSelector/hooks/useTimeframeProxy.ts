@@ -1,12 +1,11 @@
 import { CandlestickData, OhlcData } from 'lightweight-charts';
-import { CandleStickSerieData } from '../../chart';
 import { Timeframe } from '../data/timeframes';
 
 export const applyTimeframe = (
     data: CandlestickData[],
     timeframe?: Timeframe
 ) => {
-    const result: CandleStickSerieData = [];
+    const result: CandlestickData[] = [];
     if (!timeframe) return result;
     let candle: Partial<OhlcData> = {};
     for (let i = 0; i < data.length; i++) {

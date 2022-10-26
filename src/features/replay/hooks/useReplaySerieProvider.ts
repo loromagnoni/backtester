@@ -29,6 +29,7 @@ export const useReplaySerieProvider = (
                 timeframe
             );
             serie.setData(timeframeAdapted);
+            lastCandle.current = timeframeAdapted[timeframeAdapted.length - 1];
             index.current = initialIndex;
             setReplayCallback({
                 callback: () => {
