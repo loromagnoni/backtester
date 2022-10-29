@@ -1,8 +1,8 @@
 import { Flex, HStack, VStack } from '@chakra-ui/react';
-import { AssetSelector } from '../features/assetSelector/components/AssetSelector';
-import { CandleStickChart } from '../features/chart/components/CandleStickChart';
-import { ReplayControls } from '../features/replay/components/ReplayControls';
-import { TimeframeSelector } from '../features/timeframeSelector/components/TimeframeSelector';
+import { AssetSelector } from '../features/asset/assetSelector/AssetSelector';
+import { CandleStickChart } from '../features/chart/candleStickChart/CandleStickChart';
+import { ReplayToolbar } from '../features/replay/replayToolbar/ReplayToolbar';
+import { TimeframeSelector } from '../features/timeframe/timeframeSelector/TimeframeSelector';
 
 export const HomeLayout = () => {
     return (
@@ -15,7 +15,7 @@ export const HomeLayout = () => {
                     <TimeframeSelector />
                 </Flex>
                 <Flex flex={10}>
-                    <ReplayControls />
+                    <ReplayToolbar />
                 </Flex>
             </HStack>
             <Flex flex={1} w="full">
