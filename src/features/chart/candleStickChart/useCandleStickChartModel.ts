@@ -1,7 +1,14 @@
-import { ColorType, createChart, CrosshairMode } from 'lightweight-charts';
+import {
+    CandlestickData,
+    ColorType,
+    createChart,
+    CrosshairMode,
+    IChartApi,
+    ISeriesApi,
+    WhitespaceData,
+} from 'lightweight-charts';
 import { useEffect, useRef } from 'react';
-import { SerieProvider } from '../../../shared/services/chartService';
-import { useSerieProvider } from './useSerieProvider';
+import { useAppDispatch } from '../../../shared/store/hooks';
 
 export const colors = {
     priceFormat: {
@@ -38,27 +45,30 @@ export const colors = {
     },
 };
 
-export const useCandleStickChartModel = () => {
-    const { serieProvider } = useSerieProvider();
-    const chartContainerRef = useRef<HTMLDivElement>(null);
-    useChart(chartContainerRef, colors, serieProvider);
-    return { chartContainerRef };
+let serie: ISeriesApi<'Candlestick'> | undefined;
+let chart: IChartApi | undefined;
+
+export const setChartSerie = (data: (CandlestickData | WhitespaceData)[]) => {
+    serie?.setData(data);
+    chart?.timeScale().fitContent();
 };
 
-const useChart = (
-    ref: React.RefObject<HTMLDivElement>,
-    colors: any,
-    serieProvider: SerieProvider
-) => {
+export const updateChartSerie = (data: CandlestickData | WhitespaceData) =>
+    serie?.update(data);
+
+export const useCandleStickChartModel = () => {
+    const dispatch = useAppDispatch();
+    const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const handleResize = () => {
-            chart.applyOptions({
+            chart?.applyOptions({
                 width: ref.current!.clientWidth,
                 height: ref.current!.clientHeight,
                 ...colors,
             });
         };
-        const chart = createChart(ref.current!, {
+        chart = createChart(ref.current!, {
             layout: {
                 background: { type: ColorType.Solid, color: colors.background },
                 textColor: colors.text,
@@ -68,12 +78,13 @@ const useChart = (
             ...colors,
         });
         chart.timeScale().fitContent();
-        serieProvider(chart);
+        serie = chart.addCandlestickSeries(colors);
         window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('resize', handleResize);
-            chart.remove();
+            chart?.remove();
         };
-    }, [colors, ref, serieProvider]);
+    }, [dispatch, ref]);
+    return { chartContainerRef: ref };
 };

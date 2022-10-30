@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
-import { useReplayPlayStatus } from '../../../shared/stores/useReplayPlayStatus';
+import { toggleReplay } from '../../../shared/store/appSlice';
+import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
 
 export const usePlayButtonModel = () => {
-    const [isPlaying, setIsPlaying] = useReplayPlayStatus();
+    const isReplaying = useAppSelector((state) => state.app.value.isReplaying);
+    const dispatch = useAppDispatch();
     const onClick = useCallback(() => {
-        console.log('pippo');
-        setIsPlaying(!isPlaying);
-    }, [isPlaying, setIsPlaying]);
-    const showPauseIcon = isPlaying;
+        dispatch(toggleReplay());
+    }, [dispatch]);
+    const showPauseIcon = isReplaying;
     return { showPauseIcon, onClick };
 };

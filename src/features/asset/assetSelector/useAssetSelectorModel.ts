@@ -1,23 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { AssetData } from '../../../shared/data/assets';
-import {
-    assetQuery,
-    findAssetByTicker,
-    tickers,
-} from '../../../shared/services/assetService';
-import { useSelectedAssetSerie } from '../../../shared/stores/useSelectedAssetSerie';
+import { CandlestickData } from 'lightweight-charts';
+import { useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
+import { assetQuery, tickers } from '../../../shared/services/assetService';
+import { assetSelected, setAssetSeries } from '../../../shared/store/appSlice';
 
 export const useAssetSelectorModel = () => {
-    const [selectedAsset, setSelectedAsset] = useState<AssetData>();
-    const [_, setSelectedAssetSerie] = useSelectedAssetSerie();
-
-    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedAsset(findAssetByTicker(e.target.value));
-    };
+    const dispatch = useAppDispatch();
+    const selectedAsset = useAppSelector((state) => state.app.value.asset);
+    const onChange = useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>) =>
+            dispatch(assetSelected(e.target.value)),
+        [dispatch]
+    );
+    const onSuccess = useCallback(
+        (serie: CandlestickData[]) => dispatch(setAssetSeries(serie)),
+        [dispatch]
+    );
 
     useQuery(['selectedAsset', selectedAsset], assetQuery(selectedAsset), {
-        onSuccess: setSelectedAssetSerie,
+        onSuccess: onSuccess,
     });
 
     return { tickers, onChange };

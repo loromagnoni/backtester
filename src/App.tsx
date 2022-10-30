@@ -2,6 +2,7 @@ import { ChakraProvider, theme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './layout/global.css';
 import { HomeLayout } from './layout/HomeLayout';
+import { StoreProvider } from './shared/store/StoreProvider';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -13,9 +14,11 @@ const queryClient = new QueryClient({
 });
 
 export const App = () => (
-    <ChakraProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-            <HomeLayout />
-        </QueryClientProvider>
-    </ChakraProvider>
+    <StoreProvider>
+        <ChakraProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
+                <HomeLayout />
+            </QueryClientProvider>
+        </ChakraProvider>
+    </StoreProvider>
 );

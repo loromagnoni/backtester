@@ -1,20 +1,20 @@
 import { useCallback } from 'react';
-import {
-    useDisplayTimeDate,
-    useReplayTimeDate,
-} from '../../../shared/stores/useReplayTimeDate';
+import { selectReplayDate } from '../../../shared/store/appSlice';
+import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
 
 export const useTimeSelectorModel = () => {
-    const [_, setReplayDate] = useReplayTimeDate();
-    const [displayDate, setDisplayDate] = useDisplayTimeDate();
-    const value = displayDate.toISOString().slice(0, -5);
+    const dispatch = useAppDispatch();
+    const currentReplayDate = useAppSelector(
+        (state) => new Date(state.app.value.currentReplayTimestamp)
+    );
+
+    const value = currentReplayDate.toISOString().slice(0, -5);
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const newDate = new Date(e.target.value);
-            setReplayDate(newDate);
-            setDisplayDate(newDate);
+            dispatch(selectReplayDate(newDate.getTime()));
         },
-        [setDisplayDate, setReplayDate]
+        [dispatch]
     );
     return { value, onChange };
 };

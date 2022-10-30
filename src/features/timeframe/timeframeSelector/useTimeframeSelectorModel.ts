@@ -1,22 +1,16 @@
 import { useCallback } from 'react';
-import {
-    useDisplayTimeDate,
-    useReplayTimeDate,
-} from '../../../shared/stores/useReplayTimeDate';
-import { useSelectedTimeframe } from '../../../shared/stores/useSelectedTimeframe';
 import { timeframes } from '../../../shared/data/timeframes';
+import { useAppDispatch } from '../../../shared/store/hooks';
 import { findTimeframeByLabel } from '../../../shared/services/timeframeService';
+import { selectTimeframe } from '../../../shared/store/appSlice';
 
 export const useTimeframeSelectorModel = () => {
-    const [displayDate] = useDisplayTimeDate();
-    const [__, setReplayDate] = useReplayTimeDate();
-    const [_, setSelectedTimeframe] = useSelectedTimeframe();
+    const dispatch = useAppDispatch();
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
-            setReplayDate(displayDate);
-            setSelectedTimeframe(findTimeframeByLabel(e.target.value)!);
+            dispatch(selectTimeframe(findTimeframeByLabel(e.target.value)));
         },
-        [displayDate, setReplayDate, setSelectedTimeframe]
+        [dispatch]
     );
 
     return { onChange, timeframes };
