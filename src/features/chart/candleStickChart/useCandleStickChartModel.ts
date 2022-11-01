@@ -6,6 +6,9 @@ import {
     CrosshairMode,
     IChartApi,
     ISeriesApi,
+    LineData,
+    SeriesMarker,
+    Time,
     WhitespaceData,
 } from 'lightweight-charts';
 import { useEffect, useRef } from 'react';
@@ -55,6 +58,27 @@ export const setChartSerie = (data: (CandlestickData | WhitespaceData)[]) => {
 
 export const updateChartSerie = (data: CandlestickData | WhitespaceData) =>
     serie?.update(data);
+
+export const updateMarkers = (m: SeriesMarker<Time>[]) => serie?.setMarkers(m);
+
+const lines = [] as ISeriesApi<'Line'>[];
+
+export const addPositionLine = (data: LineData[], color: string) => {
+    const lineSerie = chart!.addLineSeries({
+        color,
+        lineWidth: 1,
+        lineStyle: 2,
+        priceLineVisible: false,
+        lastValueVisible: false,
+    });
+    lineSerie.setData(data);
+    lines.push(lineSerie);
+};
+
+export const clearLines = () => {
+    lines.forEach((l) => chart?.removeSeries(l));
+    lines.length = 0;
+};
 
 export const useCandleStickChartModel = () => {
     const dispatch = useAppDispatch();

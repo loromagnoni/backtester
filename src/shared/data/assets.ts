@@ -1,18 +1,21 @@
 export type AssetData = {
     ticker: string;
     url: string;
-    start: Date;
-    end: Date;
-}
+    start: number;
+    end: number;
+};
 
-export const assets: AssetData[] = [{
-    ticker: 'EURUSD',
-    url: '/data/EURUSD_1m_01092022.json',
-    start: new Date('2022-09-01'),
-    end: new Date('2022-09-30')
-},{
-    ticker: 'GBPUSD',
-    url: '/data/GBPUSD_1m_01092022.json',
-    start: new Date('2022-09-01'),
-    end: new Date('2022-09-30')
-}];
+export const assets: AssetData[] = [
+    {
+        ticker: 'EURUSD',
+        url: '/data/EURUSD_1m_01092022.json',
+        start: new Date('2022-09-01').getTime(),
+        end: new Date('2022-09-30').getTime(),
+    },
+    {
+        ticker: 'GBPUSD',
+        url: '/data/GBPUSD_1m_01092022.json',
+        start: new Date('2022-09-01').getTime(),
+        end: new Date('2022-09-30').getTime(),
+    },
+];

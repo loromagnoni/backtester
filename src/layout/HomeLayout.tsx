@@ -3,6 +3,7 @@ import { AssetSelector } from 'features/asset';
 import { CandleStickChart } from 'features/chart';
 import { ReplayToolbar } from 'features/replay';
 import { TimeframeSelector } from 'features/timeframe';
+import { TradeToolbar } from 'features/trade';
 
 export const HomeLayout = () => {
     return (
@@ -21,6 +22,9 @@ export const HomeLayout = () => {
             <Flex flex={1} w="full">
                 <CandleStickChart />
             </Flex>
+            <HStack justifyContent="start" w="full" p={2}>
+                <TradeToolbar />
+            </HStack>
         </VStack>
     );
 };
