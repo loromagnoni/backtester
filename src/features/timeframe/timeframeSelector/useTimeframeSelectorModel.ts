@@ -1,8 +1,7 @@
+import { timeframes } from 'shared/data/timeframes';
+import { findTimeframeByLabel } from 'shared/services/timeframeService';
+import { selectTimeframe, useAppDispatch } from 'shared/store';
 import { useCallback } from 'react';
-import { timeframes } from '../../../shared/data/timeframes';
-import { useAppDispatch } from '../../../shared/store/hooks';
-import { findTimeframeByLabel } from '../../../shared/services/timeframeService';
-import { selectTimeframe } from '../../../shared/store/appSlice';
 
 export const useTimeframeSelectorModel = () => {
     const dispatch = useAppDispatch();

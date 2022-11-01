@@ -1,9 +1,13 @@
+import { assetQuery, tickers } from 'shared/services/assetService';
+import {
+    assetSelected,
+    setAssetSeries,
+    useAppDispatch,
+    useAppSelector,
+} from 'shared/store';
 import { useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'lightweight-charts';
 import { useCallback } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
-import { assetQuery, tickers } from '../../../shared/services/assetService';
-import { assetSelected, setAssetSeries } from '../../../shared/store/appSlice';
 
 export const useAssetSelectorModel = () => {
     const dispatch = useAppDispatch();

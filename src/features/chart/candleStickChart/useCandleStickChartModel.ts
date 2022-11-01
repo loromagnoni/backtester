@@ -1,3 +1,4 @@
+import { useAppDispatch } from 'shared/store';
 import {
     CandlestickData,
     ColorType,
@@ -8,7 +9,6 @@ import {
     WhitespaceData,
 } from 'lightweight-charts';
 import { useEffect, useRef } from 'react';
-import { useAppDispatch } from '../../../shared/store/hooks';
 
 export const colors = {
     priceFormat: {

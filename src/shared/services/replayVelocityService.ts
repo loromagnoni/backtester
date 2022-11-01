@@ -1,4 +1,4 @@
-import { velocityOptions } from '../data/velocityOption';
+import { velocityOptions } from 'shared/data/velocityOption';
 
 export const velocityLabels = velocityOptions.map((v) => v.label);
 

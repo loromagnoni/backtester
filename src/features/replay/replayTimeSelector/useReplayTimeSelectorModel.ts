@@ -1,6 +1,5 @@
+import { selectReplayDate, useAppDispatch, useAppSelector } from 'shared/store';
 import { useCallback } from 'react';
-import { selectReplayDate } from '../../../shared/store/appSlice';
-import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
 
 export const useTimeSelectorModel = () => {
     const dispatch = useAppDispatch();

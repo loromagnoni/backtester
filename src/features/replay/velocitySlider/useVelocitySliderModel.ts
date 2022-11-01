@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../shared/store/hooks';
+import { changeVelocity, useAppDispatch, useAppSelector } from 'shared/store';
 import {
     findVelocityOptionByLabel,
     findVelocityOptionByUpdates,
-} from '../../../shared/services/replayVelocityService';
-import { changeVelocity } from '../../../shared/store/appSlice';
+} from 'shared/services/replayVelocityService';
 
 export const useVelocitySliderModel = () => {
     const velocity = useAppSelector((state) => state.app.value.replayVelocity);

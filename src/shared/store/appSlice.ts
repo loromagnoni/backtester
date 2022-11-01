@@ -1,19 +1,15 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { IChartApi, CandlestickData } from 'lightweight-charts';
+import { AssetData } from 'shared/data/assets';
+import { Timeframe } from 'shared/data/timeframes';
+import { setChartSerie, updateChartSerie } from 'features/chart';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { findAssetByTicker } from 'shared/services/assetService';
 import {
-    setChartSerie,
-    updateChartSerie,
-} from '../../features/chart/candleStickChart/useCandleStickChartModel';
-import { AssetData } from '../data/assets';
-import { Timeframe } from '../data/timeframes';
-import { findAssetByTicker } from '../services/assetService';
-import {
-    isSameDay,
-    getCandlesIndexUntilDate,
     getCandleAfterMinute,
-} from '../services/candleCalculatorService';
-import { applyTimeframe } from '../services/timeframeService';
-import { RootState } from './store';
+    getCandlesIndexUntilDate,
+    isSameDay,
+} from 'shared/services/candleCalculatorService';
+import { applyTimeframe } from 'shared/services/timeframeService';
+import { CandlestickData, IChartApi } from 'lightweight-charts';
 
 export type SerieProvider = (chart: IChartApi) => void;
 
@@ -130,39 +126,3 @@ export const {
     selectReplayDate,
     startReplay,
 } = appSlice.actions;
-
-export const toggleReplay = createAsyncThunk<void, void, { state: RootState }>(
-    'replay/activate',
-    async (_, { getState, dispatch }) => {
-        let interval: NodeJS.Timeout | undefined = undefined;
-        const state = getState();
-        const isReplaying = !state.app.value.isReplaying;
-        if (isReplaying) {
-            if (state.app.value.replayVelocity !== 0) {
-                interval = setInterval(() => {
-                    dispatch(nextMinuteReplay());
-                }, 1000 / state.app.value.replayVelocity);
-            }
-            dispatch(startReplay(interval));
-        } else {
-            dispatch(stopReplay());
-        }
-    }
-);
-
-export const changeVelocity = createAsyncThunk<
-    void,
-    number,
-    { state: RootState }
->('replay/reset', async (velocity, { getState, dispatch }) => {
-    let interval: NodeJS.Timeout | undefined = undefined;
-    const state = getState();
-    clearInterval(state.app.value.replayInterval);
-    dispatch(setReplayVelocity(velocity));
-    if (state.app.value.isReplaying && state.app.value.replayVelocity !== 0) {
-        interval = setInterval(() => {
-            dispatch(nextMinuteReplay());
-        }, 1000 / state.app.value.replayVelocity);
-        dispatch(startReplay(interval));
-    }
-});

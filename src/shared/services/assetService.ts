@@ -1,8 +1,8 @@
-import { AssetData, assets } from '../data/assets';
+import { AssetData, assets } from 'shared/data/assets';
 import {
     CandleStickSerieData,
     onlyOpenMarketHours,
-} from './candleCalculatorService';
+} from 'shared/services/candleCalculatorService';
 
 export const tickers = Array.from(new Set(assets.map((asset) => asset.ticker)));
 

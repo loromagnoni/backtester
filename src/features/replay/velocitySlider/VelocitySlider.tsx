@@ -7,8 +7,8 @@ import {
     SliderTrack,
     Tooltip,
 } from '@chakra-ui/react';
+import { velocityLabels } from 'shared/services/replayVelocityService';
 import { TiMediaFastForward } from 'react-icons/ti';
-import { velocityLabels } from '../../../shared/services/replayVelocityService';
 import { useVelocitySliderModel } from './useVelocitySliderModel';
 
 export const VelocitySlider = () => {

@@ -1,7 +1,9 @@
 import { Box, Flex, HStack } from '@chakra-ui/react';
-import { PlayButton } from '../playButton/PlayButton';
-import { ReplayTimeSelector } from '../replayTimeSelector/ReplayTimeSelector';
-import { VelocitySlider } from '../velocitySlider/VelocitySlider';
+import {
+    PlayButton,
+    ReplayTimeSelector,
+    VelocitySlider,
+} from 'features/replay';
 
 export const ReplayToolbar = () => {
     return (

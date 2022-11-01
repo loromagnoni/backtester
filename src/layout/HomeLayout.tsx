@@ -1,8 +1,8 @@
 import { Flex, HStack, VStack } from '@chakra-ui/react';
-import { AssetSelector } from '../features/asset/assetSelector/AssetSelector';
-import { CandleStickChart } from '../features/chart/candleStickChart/CandleStickChart';
-import { ReplayToolbar } from '../features/replay/replayToolbar/ReplayToolbar';
-import { TimeframeSelector } from '../features/timeframe/timeframeSelector/TimeframeSelector';
+import { AssetSelector } from 'features/asset';
+import { CandleStickChart } from 'features/chart';
+import { ReplayToolbar } from 'features/replay';
+import { TimeframeSelector } from 'features/timeframe';
 
 export const HomeLayout = () => {
     return (
