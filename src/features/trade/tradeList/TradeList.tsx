@@ -8,16 +8,11 @@ import {
     Thead,
     Tr,
 } from '@chakra-ui/react';
-import { useThrottle } from 'core/render';
-import { totalProfitSelector, useAppSelector } from 'shared/store';
 import { TradeItem } from './TradeItem';
 import { useTradeListModel } from './useTradeListModel';
 
 export const TradeList = () => {
-    const { trades } = useTradeListModel();
-    const total = useAppSelector(totalProfitSelector);
-    const throttledTrades = useThrottle(trades, 1000);
-    const throttledTotal = useThrottle(total, 1000);
+    const { trades, onItemClick, total } = useTradeListModel();
     return (
         <TableContainer w="full">
             <Table size="sm">
@@ -28,14 +23,18 @@ export const TradeList = () => {
                         <Th isNumeric>Profit</Th>
                     </Tr>
                 </Thead>
-                <Tbody>{throttledTrades.map(TradeItem)}</Tbody>
+                <Tbody>
+                    {trades.map((t) => (
+                        <TradeItem key={t.id} trade={t} onClick={onItemClick} />
+                    ))}
+                </Tbody>
 
                 <Tfoot>
                     <Tr>
                         <Td></Td>
                         <Td></Td>
                         <Td isNumeric>
-                            <b>{throttledTotal}</b>
+                            <b>{total}</b>
                         </Td>
                     </Tr>
                     <Tr>

@@ -1,5 +1,6 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ModalProvider } from 'core/modal';
 import './layout/global.css';
 import { HomeLayout } from './layout/HomeLayout';
 import { StoreProvider } from './shared/store/StoreProvider';
@@ -17,7 +18,9 @@ export const App = () => (
     <StoreProvider>
         <ChakraProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-                <HomeLayout />
+                <ModalProvider>
+                    <HomeLayout />
+                </ModalProvider>
             </QueryClientProvider>
         </ChakraProvider>
     </StoreProvider>

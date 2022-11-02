@@ -11,6 +11,7 @@ export type Trade = {
     id: string;
     entryTimestamp: number;
     entryPrice: number;
+    takeProfitPrice?: number;
     closePrice: number | undefined;
     profit: number | undefined;
     type: TradeType;
@@ -30,6 +31,7 @@ export const calculateProfit = (trade: Trade, currentPrice: number): number => {
 };
 
 export type Marker = {
+    tradeId: string;
     time: any;
     position: SeriesMarkerPosition;
     color: string;
@@ -38,11 +40,13 @@ export type Marker = {
 };
 
 export const getBuyMarker = (
+    tradeId: string,
     time: any,
     size: number,
     price: number
 ): Marker => {
     return {
+        tradeId,
         time: time,
         position: 'belowBar',
         color: '#FFFFFF',
@@ -52,11 +56,13 @@ export const getBuyMarker = (
 };
 
 export const getSellMarker = (
+    tradeId: string,
     time: any,
     size: number,
     price: number
 ): Marker => {
     return {
+        tradeId,
         time: time,
         position: 'aboveBar',
         color: '#FFFFFF',

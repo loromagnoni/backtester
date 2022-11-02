@@ -5,8 +5,10 @@ import {
     createChart,
     CrosshairMode,
     IChartApi,
+    IPriceLine,
     ISeriesApi,
     LineData,
+    LineStyle,
     SeriesMarker,
     Time,
     WhitespaceData,
@@ -73,6 +75,24 @@ export const addPositionLine = (data: LineData[], color: string) => {
     });
     lineSerie.setData(data);
     lines.push(lineSerie);
+};
+
+const priceLines = [] as IPriceLine[];
+export const addPriceLine = (price: number, color: string) => {
+    const priceLine = serie?.createPriceLine({
+        price,
+        color,
+        lineWidth: 1,
+        lineVisible: true,
+        lineStyle: LineStyle.Solid,
+        axisLabelVisible: true,
+        title: 'tp',
+    });
+    priceLines.push(priceLine!);
+};
+export const clearPriceLines = () => {
+    priceLines.forEach((l) => serie?.removePriceLine(l));
+    priceLines.length = 0;
 };
 
 export const clearLines = () => {

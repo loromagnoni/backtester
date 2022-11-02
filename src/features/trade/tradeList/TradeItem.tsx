@@ -1,9 +1,14 @@
 import { Td, Tr } from '@chakra-ui/react';
 import { Trade } from 'shared/services/tradeService';
 
-export const TradeItem = (trade: Trade) => {
+type TradeItemProps = {
+    trade: Trade;
+    onClick: (t: Trade) => void;
+};
+
+export const TradeItem = ({ trade, onClick }: TradeItemProps) => {
     return (
-        <Tr key={trade.id}>
+        <Tr onClick={() => onClick(trade)}>
             <Td>{trade.entryPrice}</Td>
             <Td>{trade.type}</Td>
             <Td isNumeric>{trade.profit}</Td>

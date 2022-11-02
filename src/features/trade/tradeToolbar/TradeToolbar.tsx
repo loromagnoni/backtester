@@ -4,6 +4,7 @@ import {
     OpenShortPositionButton,
     TradeList,
 } from 'features/trade';
+import { TradeModal } from '../tradeModal/TradeModal';
 
 export const TradeToolbar = () => {
     return (
@@ -11,6 +12,7 @@ export const TradeToolbar = () => {
             <OpenLongPositionButton />
             <OpenShortPositionButton />
             <TradeList />
+            <TradeModal />
         </HStack>
     );
 };
