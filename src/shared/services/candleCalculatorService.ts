@@ -1,4 +1,7 @@
-import { CandlestickData, ISeriesApi } from 'lightweight-charts';
+import {
+    CandlestickData,
+    ISeriesApi,
+} from 'core/lightweight-chart/lightweight-charts.js';
 
 export type CandleStickSerieData = Parameters<
     ISeriesApi<'Candlestick'>['setData']

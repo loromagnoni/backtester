@@ -9,7 +9,10 @@ import {
     isSameDay,
 } from 'shared/services/candleCalculatorService';
 import { applyTimeframe } from 'shared/services/timeframeService';
-import { CandlestickData, IChartApi } from 'lightweight-charts';
+import {
+    CandlestickData,
+    IChartApi,
+} from 'core/lightweight-chart/lightweight-charts.js';
 
 export type SerieProvider = (chart: IChartApi) => void;
 

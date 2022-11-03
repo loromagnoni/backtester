@@ -1,5 +1,8 @@
 import { Timeframe, timeframes } from 'shared/data/timeframes';
-import { CandlestickData, OhlcData } from 'lightweight-charts';
+import {
+    CandlestickData,
+    OhlcData,
+} from 'core/lightweight-chart/lightweight-charts.js';
 
 export const findTimeframeByLabel = (label: string) =>
     timeframes.find((t) => t.label === label);

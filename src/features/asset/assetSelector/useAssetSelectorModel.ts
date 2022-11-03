@@ -6,7 +6,7 @@ import {
     useAppSelector,
 } from 'shared/store';
 import { useQuery } from '@tanstack/react-query';
-import { CandlestickData } from 'lightweight-charts';
+import { CandlestickData } from 'core/lightweight-chart/lightweight-charts.js';
 import { useCallback } from 'react';
 
 export const useAssetSelectorModel = () => {

@@ -1,5 +1,8 @@
 import { truncateDecimals } from 'core/converter';
-import { SeriesMarkerPosition, SeriesMarkerShape } from 'lightweight-charts';
+import {
+    SeriesMarkerPosition,
+    SeriesMarkerShape,
+} from 'core/lightweight-chart/lightweight-charts.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export enum TradeType {
@@ -17,8 +20,10 @@ export type Trade = {
     type: TradeType;
 };
 
-export const generateTradeId = () => {
-    return uuidv4();
+let incremental = 0;
+
+export const generateTradeId = (): string => {
+    return (++incremental).toString();
 };
 
 export const calculateProfit = (trade: Trade, currentPrice: number): number => {

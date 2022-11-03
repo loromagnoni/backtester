@@ -7,7 +7,10 @@ import {
     clearPriceLines,
     updateMarkers,
 } from 'features/chart';
-import { CandlestickData, UTCTimestamp } from 'lightweight-charts';
+import {
+    CandlestickData,
+    UTCTimestamp,
+} from 'core/lightweight-chart/lightweight-charts.js';
 import {
     calculateProfit,
     generateTradeId,
@@ -108,7 +111,11 @@ export const tradeSlice = createSlice({
             clearPriceLines();
             state.openPositions.forEach((p) => {
                 if (p.takeProfitPrice) {
-                    addPriceLine(p.takeProfitPrice, '#4bffb5');
+                    addPriceLine(
+                        p.takeProfitPrice,
+                        '#4bffb5',
+                        selectedTrade.id
+                    );
                 }
             });
         },

@@ -1,4 +1,6 @@
 import { useAppDispatch } from 'shared/store';
+
+import { useEffect, useRef } from 'react';
 import {
     CandlestickData,
     ColorType,
@@ -12,8 +14,7 @@ import {
     SeriesMarker,
     Time,
     WhitespaceData,
-} from 'lightweight-charts';
-import { useEffect, useRef } from 'react';
+} from 'core/lightweight-chart';
 
 export const colors = {
     priceFormat: {
@@ -78,7 +79,7 @@ export const addPositionLine = (data: LineData[], color: string) => {
 };
 
 const priceLines = [] as IPriceLine[];
-export const addPriceLine = (price: number, color: string) => {
+export const addPriceLine = (price: number, color: string, tradeId: string) => {
     const priceLine = serie?.createPriceLine({
         price,
         color,
@@ -86,7 +87,8 @@ export const addPriceLine = (price: number, color: string) => {
         lineVisible: true,
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
-        title: 'tp',
+        draggable: true,
+        title: '#' + tradeId + ' TP',
     });
     priceLines.push(priceLine!);
 };
@@ -122,6 +124,7 @@ export const useCandleStickChartModel = () => {
             ...colors,
         });
         chart.timeScale().fitContent();
+        chart.subscribeCustomPriceLineDragged((p) => console.log(p));
         serie = chart.addCandlestickSeries(colors);
         window.addEventListener('resize', handleResize);
 
