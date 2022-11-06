@@ -1,6 +1,5 @@
-import { useAppDispatch } from 'shared/store';
+import { changedTradePrice, useAppDispatch } from 'shared/store';
 
-import { useEffect, useRef } from 'react';
 import {
     CandlestickData,
     ColorType,
@@ -15,6 +14,14 @@ import {
     Time,
     WhitespaceData,
 } from 'core/lightweight-chart';
+import { useEffect, useRef } from 'react';
+import {
+    getOrderTypeFromPriceLine,
+    getPriceFromPriceLine,
+    getPriceLineTitle,
+    getTradeIdFromPriceLine,
+    OrderType,
+} from 'shared/services/tradeService';
 
 export const colors = {
     priceFormat: {
@@ -79,7 +86,12 @@ export const addPositionLine = (data: LineData[], color: string) => {
 };
 
 const priceLines = [] as IPriceLine[];
-export const addPriceLine = (price: number, color: string, tradeId: string) => {
+export const addPriceLine = (
+    price: number,
+    color: string,
+    tradeId: string,
+    orderType: OrderType
+) => {
     const priceLine = serie?.createPriceLine({
         price,
         color,
@@ -88,7 +100,7 @@ export const addPriceLine = (price: number, color: string, tradeId: string) => {
         lineStyle: LineStyle.Solid,
         axisLabelVisible: true,
         draggable: true,
-        title: '#' + tradeId + ' TP',
+        title: getPriceLineTitle(tradeId, orderType),
     });
     priceLines.push(priceLine!);
 };
@@ -124,7 +136,15 @@ export const useCandleStickChartModel = () => {
             ...colors,
         });
         chart.timeScale().fitContent();
-        chart.subscribeCustomPriceLineDragged((p) => console.log(p));
+        chart.subscribeCustomPriceLineDragged((p) =>
+            dispatch(
+                changedTradePrice({
+                    tradeId: getTradeIdFromPriceLine(p),
+                    newPrice: getPriceFromPriceLine(p),
+                    orderType: getOrderTypeFromPriceLine(p),
+                })
+            )
+        );
         serie = chart.addCandlestickSeries(colors);
         window.addEventListener('resize', handleResize);
 

@@ -1,22 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { truncateDecimals } from 'core/converter';
 import {
+    CandlestickData,
+    UTCTimestamp,
+} from 'core/lightweight-chart/lightweight-charts.js';
+import {
     addPositionLine,
-    addPriceLine,
     clearLines,
     clearPriceLines,
     updateMarkers,
 } from 'features/chart';
 import {
-    CandlestickData,
-    UTCTimestamp,
-} from 'core/lightweight-chart/lightweight-charts.js';
-import {
     calculateProfit,
+    drawStopLossLine,
+    drawTakeProfitLine,
     generateTradeId,
     getBuyMarker,
     getSellMarker,
+    hasToBeClosed,
     Marker,
+    OrderType,
     Trade,
     TradeType,
 } from 'shared/services/tradeService';
@@ -30,6 +33,35 @@ export const totalProfitSelector = (state: RootState) =>
         ),
         2
     );
+
+const updatePriceLines = (
+    state: ReturnType<typeof tradeSlice.getInitialState>
+) => {
+    clearPriceLines();
+    state.openPositions.forEach(drawTakeProfitLine);
+    state.openPositions.forEach(drawStopLossLine);
+};
+
+const closePosition = (
+    state: ReturnType<typeof tradeSlice.getInitialState>,
+    tradeId: string
+) => {
+    const toClose = state.openPositions.find((t) => t.id === tradeId)!;
+    state.closedPositions.push(toClose);
+    state.openPositions = state.openPositions.filter((t) => t.id !== tradeId);
+    state.markers = state.markers.filter((m) => m.tradeId !== tradeId);
+    updateMarkers(state.markers);
+    updatePriceLines(state);
+};
+
+const maybeClosePosition = (
+    state: ReturnType<typeof tradeSlice.getInitialState>,
+    currentPrice: number
+) => {
+    state.openPositions
+        .filter((t) => hasToBeClosed(t, currentPrice))
+        .forEach((t) => closePosition(state, t.id));
+};
 
 export const tradeSlice = createSlice({
     name: 'trade',
@@ -47,6 +79,7 @@ export const tradeSlice = createSlice({
                 p.profit = calculateProfit(p, action.payload.close);
             });
             clearLines();
+            maybeClosePosition(state, action.payload.close);
             state.openPositions.forEach((p) =>
                 addPositionLine(
                     [
@@ -62,6 +95,27 @@ export const tradeSlice = createSlice({
                     p.type === TradeType.LONG ? '#4bffb5' : '#ff4976'
                 )
             );
+        },
+        changedTradePrice: (
+            state,
+            action: PayloadAction<{
+                tradeId: string;
+                newPrice: number;
+                orderType?: OrderType;
+            }>
+        ) => {
+            const trade = state.openPositions.find(
+                (p) => p.id === action.payload.tradeId
+            );
+            if (trade) {
+                if (action.payload.orderType === OrderType.TP) {
+                    trade.takeProfitPrice = action.payload.newPrice;
+                }
+                if (action.payload.orderType === OrderType.SL) {
+                    trade.stopLossPrice = action.payload.newPrice;
+                }
+                updatePriceLines(state);
+            }
         },
         openLongPosition: (state) => {
             if (state.currentCandle) {
@@ -91,33 +145,21 @@ export const tradeSlice = createSlice({
             state.selectedTradeId = action.payload;
         },
         closeTrade: (state, action: PayloadAction<string>) => {
-            const toClose = state.openPositions.find(
-                (t) => t.id === action.payload
-            )!;
-            state.closedPositions.push(toClose);
-            state.openPositions = state.openPositions.filter(
-                (t) => t.id !== action.payload
-            );
-            state.markers = state.markers.filter(
-                (m) => m.tradeId !== action.payload
-            );
-            updateMarkers(state.markers);
+            closePosition(state, action.payload);
         },
         takeProfitUpdated: (state, action: PayloadAction<number>) => {
             const selectedTrade = state.openPositions.find(
                 (t) => t.id === state.selectedTradeId
             )!;
             selectedTrade.takeProfitPrice = action.payload;
-            clearPriceLines();
-            state.openPositions.forEach((p) => {
-                if (p.takeProfitPrice) {
-                    addPriceLine(
-                        p.takeProfitPrice,
-                        '#4bffb5',
-                        selectedTrade.id
-                    );
-                }
-            });
+            updatePriceLines(state);
+        },
+        stopLossUpdated: (state, action: PayloadAction<number>) => {
+            const selectedTrade = state.openPositions.find(
+                (t) => t.id === state.selectedTradeId
+            )!;
+            selectedTrade.stopLossPrice = action.payload;
+            updatePriceLines(state);
         },
         openShortPosition: (state) => {
             if (state.currentCandle) {
@@ -152,5 +194,7 @@ export const {
     changeCurrentPrice,
     takeProfitUpdated,
     tradeSelected,
+    changedTradePrice,
     closeTrade,
+    stopLossUpdated,
 } = tradeSlice.actions;

@@ -2,6 +2,7 @@ import { useModal } from 'core/modal';
 import { useCallback, useEffect, useState } from 'react';
 import {
     closeTrade,
+    stopLossUpdated,
     takeProfitUpdated,
     useAppDispatch,
     useAppSelector,
@@ -24,10 +25,17 @@ export const useTradeModalModel = () => {
         number | undefined
     >(trade?.takeProfitPrice);
 
+    const [stopLossInputValue, setStopLossInputValue] = useState<
+        number | undefined
+    >(trade?.stopLossPrice);
+
     const onSaveTakeProfitClick = useCallback(() => {
         dispatch(takeProfitUpdated(Number(takeProfitInputValue)));
-        onClose();
-    }, [dispatch, onClose, takeProfitInputValue]);
+    }, [dispatch, takeProfitInputValue]);
+
+    const onSaveStopLossClick = useCallback(() => {
+        dispatch(stopLossUpdated(Number(stopLossInputValue)));
+    }, [dispatch, stopLossInputValue]);
 
     const onTakeProfitInputChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +44,16 @@ export const useTradeModalModel = () => {
         []
     );
 
+    const onStopLossInputChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            setStopLossInputValue(Number(e.target.value));
+        },
+        []
+    );
+
     useEffect(() => {
         setTakeProfitInputValue(trade?.takeProfitPrice ?? 0);
+        setStopLossInputValue(trade?.stopLossPrice ?? 0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
@@ -45,8 +61,11 @@ export const useTradeModalModel = () => {
         onClose,
         onCloseTradeClick,
         onSaveTakeProfitClick,
+        onSaveStopLossClick,
         takeProfitInputValue,
+        stopLossInputValue,
         onTakeProfitInputChange,
+        onStopLossInputChange,
         isOpen,
         trade,
     };

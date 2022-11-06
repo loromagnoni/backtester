@@ -17,8 +17,11 @@ export const TradeModal = () => {
         onClose,
         onCloseTradeClick,
         onSaveTakeProfitClick,
+        onSaveStopLossClick,
         takeProfitInputValue,
+        stopLossInputValue,
         onTakeProfitInputChange,
+        onStopLossInputChange,
         trade,
     } = useTradeModalModel();
     return (
@@ -50,8 +53,17 @@ export const TradeModal = () => {
                         >
                             Save Take Profit
                         </Button>
-                        <Input placeholder="SL"></Input>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        <Input
+                            placeholder="SL"
+                            type={'number'}
+                            value={stopLossInputValue}
+                            onChange={onStopLossInputChange}
+                        ></Input>
+                        <Button
+                            colorScheme="blue"
+                            mr={3}
+                            onClick={onSaveStopLossClick}
+                        >
                             Save Stop Loss
                         </Button>
                     </ModalBody>
