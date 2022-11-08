@@ -1,12 +1,16 @@
 import { useCallback, useState } from 'react';
-import { changeVelocity, useAppDispatch, useAppSelector } from 'shared/store';
 import {
     findVelocityOptionByLabel,
     findVelocityOptionByUpdates,
 } from 'shared/services/replayVelocityService';
+import {
+    setReplayVelocity,
+    useAppDispatch,
+    useAppSelector,
+} from 'shared/store';
 
 export const useVelocitySliderModel = () => {
-    const velocity = useAppSelector((state) => state.app.value.replayVelocity);
+    const velocity = useAppSelector((state) => state.app.replayVelocity);
     const dispatch = useAppDispatch();
     const [showTooltip, setShowTooltip] = useState(false);
 
@@ -14,7 +18,7 @@ export const useVelocitySliderModel = () => {
     const onChange = useCallback(
         (l: number) =>
             dispatch(
-                changeVelocity(findVelocityOptionByLabel(l).updatesPerSecond)
+                setReplayVelocity(findVelocityOptionByLabel(l).updatesPerSecond)
             ),
         [dispatch]
     );

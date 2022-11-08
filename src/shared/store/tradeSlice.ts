@@ -1,24 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { truncateDecimals } from 'core/converter';
-import {
-    CandlestickData,
-    UTCTimestamp,
-} from 'core/lightweight-chart/lightweight-charts.js';
-import {
-    addPositionLine,
-    clearLines,
-    clearPriceLines,
-    updateMarkers,
-} from 'features/chart';
+import { CandlestickData } from 'core/lightweight-chart/lightweight-charts.js';
 import {
     calculateProfit,
-    drawStopLossLine,
-    drawTakeProfitLine,
     generateTradeId,
-    getBuyMarker,
-    getSellMarker,
     hasToBeClosed,
-    Marker,
     OrderType,
     Trade,
     TradeType,
@@ -34,14 +20,6 @@ export const totalProfitSelector = (state: RootState) =>
         2
     );
 
-const updatePriceLines = (
-    state: ReturnType<typeof tradeSlice.getInitialState>
-) => {
-    clearPriceLines();
-    state.openPositions.forEach(drawTakeProfitLine);
-    state.openPositions.forEach(drawStopLossLine);
-};
-
 const closePosition = (
     state: ReturnType<typeof tradeSlice.getInitialState>,
     tradeId: string
@@ -49,9 +27,6 @@ const closePosition = (
     const toClose = state.openPositions.find((t) => t.id === tradeId)!;
     state.closedPositions.push(toClose);
     state.openPositions = state.openPositions.filter((t) => t.id !== tradeId);
-    state.markers = state.markers.filter((m) => m.tradeId !== tradeId);
-    updateMarkers(state.markers);
-    updatePriceLines(state);
 };
 
 const maybeClosePosition = (
@@ -69,7 +44,6 @@ export const tradeSlice = createSlice({
         openPositions: [] as Trade[],
         closedPositions: [] as Trade[],
         currentCandle: undefined as CandlestickData | undefined,
-        markers: [] as Marker[],
         selectedTradeId: undefined as string | undefined,
     },
     reducers: {
@@ -78,23 +52,7 @@ export const tradeSlice = createSlice({
             state.openPositions.forEach((p) => {
                 p.profit = calculateProfit(p, action.payload.close);
             });
-            clearLines();
             maybeClosePosition(state, action.payload.close);
-            state.openPositions.forEach((p) =>
-                addPositionLine(
-                    [
-                        {
-                            value: p.entryPrice,
-                            time: p.entryTimestamp as UTCTimestamp,
-                        },
-                        {
-                            value: state.currentCandle!.close,
-                            time: state.currentCandle!.time,
-                        },
-                    ],
-                    p.type === TradeType.LONG ? '#4bffb5' : '#ff4976'
-                )
-            );
         },
         changedTradePrice: (
             state,
@@ -114,7 +72,6 @@ export const tradeSlice = createSlice({
                 if (action.payload.orderType === OrderType.SL) {
                     trade.stopLossPrice = action.payload.newPrice;
                 }
-                updatePriceLines(state);
             }
         },
         openLongPosition: (state) => {
@@ -130,15 +87,6 @@ export const tradeSlice = createSlice({
                     closePrice: undefined,
                     profit: undefined,
                 });
-                state.markers.push(
-                    getBuyMarker(
-                        id,
-                        state.currentCandle.time,
-                        1.0,
-                        state.currentCandle.close
-                    )
-                );
-                updateMarkers(state.markers);
             }
         },
         tradeSelected: (state, action: PayloadAction<string>) => {
@@ -152,14 +100,12 @@ export const tradeSlice = createSlice({
                 (t) => t.id === state.selectedTradeId
             )!;
             selectedTrade.takeProfitPrice = action.payload;
-            updatePriceLines(state);
         },
         stopLossUpdated: (state, action: PayloadAction<number>) => {
             const selectedTrade = state.openPositions.find(
                 (t) => t.id === state.selectedTradeId
             )!;
             selectedTrade.stopLossPrice = action.payload;
-            updatePriceLines(state);
         },
         openShortPosition: (state) => {
             if (state.currentCandle) {
@@ -174,15 +120,6 @@ export const tradeSlice = createSlice({
                     closePrice: undefined,
                     profit: undefined,
                 });
-                state.markers.push(
-                    getSellMarker(
-                        id,
-                        state.currentCandle.time,
-                        1.0,
-                        state.currentCandle.close
-                    )
-                );
-                updateMarkers(state.markers);
             }
         },
     },

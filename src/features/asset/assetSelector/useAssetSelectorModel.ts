@@ -11,7 +11,7 @@ import { useCallback } from 'react';
 
 export const useAssetSelectorModel = () => {
     const dispatch = useAppDispatch();
-    const selectedAsset = useAppSelector((state) => state.app.value.asset);
+    const selectedAsset = useAppSelector((state) => state.app.asset);
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) =>
             dispatch(assetSelected(e.target.value)),

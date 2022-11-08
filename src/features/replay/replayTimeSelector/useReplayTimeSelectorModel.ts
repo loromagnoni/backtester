@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 export const useTimeSelectorModel = () => {
     const dispatch = useAppDispatch();
     const currentReplayDate = useAppSelector(
-        (state) => new Date(state.app.value.currentReplayTimestamp)
+        (state) => new Date(state.app.currentReplayTimestamp)
     );
 
     const value = currentReplayDate.toISOString().slice(0, -5);
