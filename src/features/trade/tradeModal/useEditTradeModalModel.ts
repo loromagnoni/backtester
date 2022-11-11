@@ -1,3 +1,4 @@
+import { Modal } from 'App';
 import { useModal } from 'core/modal';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -8,8 +9,8 @@ import {
     useAppSelector,
 } from 'shared/store';
 
-export const useTradeModalModel = () => {
-    const { isOpen, onClose } = useModal();
+export const useEditTradeModalModel = () => {
+    const { isOpen, onClose } = useModal(Modal.EditPosition);
     const dispatch = useAppDispatch();
     const trade = useAppSelector((state) =>
         state.trade.openPositions.find(

@@ -6,6 +6,7 @@ import {
     ISeriesApi,
     LineData,
     LineStyle,
+    MouseEventHandler,
     SeriesMarkerPosition,
     SeriesMarkerShape,
     WhitespaceData,
@@ -156,4 +157,20 @@ export const updatePriceLines = (
     clearPriceLines();
     openPositions.forEach(drawTakeProfitLine);
     openPositions.forEach(drawStopLossLine);
+};
+
+const clickSubscribers: MouseEventHandler[] = [];
+
+export const chartSubscribeClick = (callback: MouseEventHandler) => {
+    clickSubscribers.push(callback);
+    chart?.subscribeClick(callback);
+};
+
+export const chartUnsubscribeAllClick = () => {
+    clickSubscribers.forEach((c) => chart?.unsubscribeClick(c));
+    clickSubscribers.length = 0;
+};
+
+export const getPriceAtY = (y: number) => {
+    return serie?.coordinateToPrice(y);
 };

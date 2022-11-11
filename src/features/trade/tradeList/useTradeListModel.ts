@@ -1,3 +1,4 @@
+import { Modal } from 'App';
 import { useModal } from 'core/modal';
 import { useThrottle } from 'core/render';
 import { useCallback } from 'react';
@@ -11,7 +12,7 @@ import {
 
 export const useTradeListModel = () => {
     const trades = useAppSelector((state) => state.trade.openPositions);
-    const { onOpen } = useModal();
+    const { onOpen } = useModal(Modal.EditPosition);
     const dispatch = useAppDispatch();
     const onItemClick = useCallback(
         (trade: Trade) => {

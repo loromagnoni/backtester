@@ -89,7 +89,7 @@ export const tradeSlice = createSlice({
                 });
             }
         },
-        tradeSelected: (state, action: PayloadAction<string>) => {
+        tradeSelected: (state, action: PayloadAction<string | undefined>) => {
             state.selectedTradeId = action.payload;
         },
         closeTrade: (state, action: PayloadAction<string>) => {
@@ -122,6 +122,26 @@ export const tradeSlice = createSlice({
                 });
             }
         },
+        openFixedRiskPosition: (
+            state,
+            action: PayloadAction<{ entryPrice: number; stopLossPrice: number }>
+        ) => {
+            const id = generateTradeId();
+            state.openPositions.push({
+                id,
+                entryTimestamp: new Date(
+                    state.currentCandle!.time as string
+                ).getTime(),
+                type:
+                    action.payload.stopLossPrice <= action.payload.entryPrice
+                        ? TradeType.LONG
+                        : TradeType.SHORT,
+                entryPrice: action.payload.entryPrice,
+                stopLossPrice: action.payload.stopLossPrice,
+                closePrice: undefined,
+                profit: undefined,
+            });
+        },
     },
 });
 
@@ -134,4 +154,5 @@ export const {
     changedTradePrice,
     closeTrade,
     stopLossUpdated,
+    openFixedRiskPosition,
 } = tradeSlice.actions;

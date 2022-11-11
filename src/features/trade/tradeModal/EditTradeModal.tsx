@@ -9,7 +9,7 @@ import {
     ModalHeader,
     ModalOverlay,
 } from '@chakra-ui/react';
-import { useTradeModalModel } from './useTradeModalModel';
+import { useEditTradeModalModel } from './useEditTradeModalModel';
 
 export const TradeModal = () => {
     const {
@@ -23,7 +23,7 @@ export const TradeModal = () => {
         onTakeProfitInputChange,
         onStopLossInputChange,
         trade,
-    } = useTradeModalModel();
+    } = useEditTradeModalModel();
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
