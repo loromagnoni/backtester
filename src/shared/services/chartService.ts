@@ -11,7 +11,7 @@ import {
     SeriesMarkerShape,
     WhitespaceData,
 } from 'core/lightweight-chart';
-import { OrderType, Trade } from './tradeService';
+import { Order, OrderType, Trade } from './tradeService';
 
 export let serie: ISeriesApi<'Candlestick'> | undefined;
 export let chart: IChartApi | undefined;
@@ -52,21 +52,28 @@ export const addPositionLine = (data: LineData[], color: string) => {
     lines.push(lineSerie);
 };
 
-export const addPriceLine = (
-    price: number,
-    color: string,
-    tradeId: string,
-    orderType: OrderType
-) => {
+type PriceLineOptions = {
+    price: number;
+    color: string;
+    lineStyle: LineStyle;
+    title: string;
+};
+
+export const addPriceLine = ({
+    price,
+    color,
+    lineStyle,
+    title,
+}: PriceLineOptions) => {
     const priceLine = serie?.createPriceLine({
         price,
         color,
         lineWidth: 1,
         lineVisible: true,
-        lineStyle: LineStyle.Solid,
+        lineStyle: lineStyle,
         axisLabelVisible: true,
         draggable: true,
-        title: getPriceLineTitle(tradeId, orderType),
+        title: title,
     });
     priceLines.push(priceLine!);
 };
@@ -116,13 +123,58 @@ export const drawTakeProfitLine = (
     t: Pick<Trade, 'id' | 'takeProfitPrice'>
 ) => {
     if (t.takeProfitPrice) {
-        addPriceLine(t.takeProfitPrice, '#4bffb5', t.id, OrderType.TP);
+        addPriceLine({
+            price: t.takeProfitPrice,
+            color: '#4bffb5',
+            lineStyle: LineStyle.Solid,
+            title: getPriceLineTitle(t.id, OrderType.TP),
+        });
     }
 };
+
+export const drawOrderTakeProfitLine = (
+    t: Pick<Order, 'id' | 'takeProfitPrice'>
+) => {
+    if (t.takeProfitPrice) {
+        addPriceLine({
+            price: t.takeProfitPrice,
+            color: '#4bffb5',
+            lineStyle: LineStyle.Dotted,
+            title: getPriceLineTitle(t.id, OrderType.TP),
+        });
+    }
+};
+export const drawOrderStopLossLine = (
+    t: Pick<Order, 'id' | 'stopLossPrice'>
+) => {
+    if (t.stopLossPrice) {
+        addPriceLine({
+            price: t.stopLossPrice,
+            color: '#ff4b4b',
+            lineStyle: LineStyle.Dotted,
+            title: getPriceLineTitle(t.id, OrderType.SL),
+        });
+    }
+};
+
 export const drawStopLossLine = (t: Pick<Trade, 'id' | 'stopLossPrice'>) => {
     if (t.stopLossPrice) {
-        addPriceLine(t.stopLossPrice, '#ff4b4b', t.id, OrderType.SL);
+        addPriceLine({
+            price: t.stopLossPrice,
+            color: '#ff4b4b',
+            lineStyle: LineStyle.Solid,
+            title: getPriceLineTitle(t.id, OrderType.SL),
+        });
     }
+};
+
+export const drawPriceLine = (o: Pick<Order, 'id' | 'price' | 'type'>) => {
+    addPriceLine({
+        price: o.price,
+        color: '#696969',
+        lineStyle: LineStyle.Dotted,
+        title: getPriceLineTitle(o.id, o.type),
+    });
 };
 
 export const getPriceLineTitle = (
@@ -152,11 +204,18 @@ export const getOrderTypeFromPriceLine = (
 };
 
 export const updatePriceLines = (
-    openPositions: Pick<Trade, 'id' | 'takeProfitPrice' | 'stopLossPrice'>[]
+    openPositions: Pick<Trade, 'id' | 'takeProfitPrice' | 'stopLossPrice'>[],
+    limitOrders: Pick<
+        Order,
+        'id' | 'takeProfitPrice' | 'stopLossPrice' | 'price' | 'type'
+    >[]
 ) => {
     clearPriceLines();
     openPositions.forEach(drawTakeProfitLine);
     openPositions.forEach(drawStopLossLine);
+    limitOrders.forEach(drawPriceLine);
+    limitOrders.forEach(drawOrderTakeProfitLine);
+    limitOrders.forEach(drawOrderStopLossLine);
 };
 
 const clickSubscribers: MouseEventHandler[] = [];

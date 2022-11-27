@@ -15,10 +15,13 @@ const useOpenPositionsLimitOrders = () =>
         shallowEqualArray
     );
 
-export const usePriceLines = () => {
-    const limitOrders = useOpenPositionsLimitOrders();
+const useLimitOrders = () =>
+    useAppSelector((state) => state.trade.limitOrders, shallowEqualArray);
 
+export const usePriceLines = () => {
+    const limitOrdersPositions = useOpenPositionsLimitOrders();
+    const limitOrders = useLimitOrders();
     useEffect(() => {
-        updatePriceLines(limitOrders);
-    }, [limitOrders]);
+        updatePriceLines(limitOrdersPositions, limitOrders);
+    }, [limitOrders, limitOrdersPositions]);
 };

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import {
-    openFixedRiskPosition,
+    addFixedRiskOrder,
     useAppDispatch,
     useAppSelector,
 } from 'shared/store';
@@ -18,7 +18,7 @@ export const useCreateFixedPosition = () => {
         if (selectedStopLoss && selectedPrice) {
             dispatch(exitCreateFixedRiskPositionMode());
             dispatch(
-                openFixedRiskPosition({
+                addFixedRiskOrder({
                     entryPrice: selectedPrice,
                     stopLossPrice: selectedStopLoss,
                 })

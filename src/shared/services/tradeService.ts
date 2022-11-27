@@ -8,6 +8,10 @@ export enum TradeType {
 export enum OrderType {
     TP = 'TP',
     SL = 'SL',
+    SELL_LIMIT = 'SELL_LIMIT',
+    BUY_LIMIT = 'BUY_LIMIT',
+    SELL_STOP = 'SELL_STOP',
+    BUY_STOP = 'BUY_STOP',
 }
 
 export type Trade = {
@@ -21,10 +25,33 @@ export type Trade = {
     type: TradeType;
 };
 
+export type Order = {
+    id: string;
+    creationTimestamp: number;
+    price: number;
+    type: OrderType;
+    takeProfitPrice?: number;
+    stopLossPrice?: number;
+};
+
 let incremental = 0;
 
 export const generateTradeId = (): string => {
     return (++incremental).toString();
+};
+
+export const getOrderType = (
+    currentPrice: number,
+    orderPrice: number,
+    stopLossPrice: number
+): OrderType => {
+    return orderPrice > currentPrice
+        ? stopLossPrice > orderPrice
+            ? OrderType.SELL_LIMIT
+            : OrderType.BUY_STOP
+        : stopLossPrice > orderPrice
+        ? OrderType.SELL_STOP
+        : OrderType.BUY_LIMIT;
 };
 
 export const calculateProfit = (trade: Trade, currentPrice: number): number => {

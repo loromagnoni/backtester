@@ -4,7 +4,9 @@ import { CandlestickData } from 'core/lightweight-chart/lightweight-charts.js';
 import {
     calculateProfit,
     generateTradeId,
+    getOrderType,
     hasToBeClosed,
+    Order,
     OrderType,
     Trade,
     TradeType,
@@ -43,6 +45,7 @@ export const tradeSlice = createSlice({
     initialState: {
         openPositions: [] as Trade[],
         closedPositions: [] as Trade[],
+        limitOrders: [] as Order[],
         currentCandle: undefined as CandlestickData | undefined,
         selectedTradeId: undefined as string | undefined,
     },
@@ -122,24 +125,23 @@ export const tradeSlice = createSlice({
                 });
             }
         },
-        openFixedRiskPosition: (
+        addFixedRiskOrder: (
             state,
             action: PayloadAction<{ entryPrice: number; stopLossPrice: number }>
         ) => {
             const id = generateTradeId();
-            state.openPositions.push({
+            state.limitOrders.push({
                 id,
-                entryTimestamp: new Date(
+                creationTimestamp: new Date(
                     state.currentCandle!.time as string
                 ).getTime(),
-                type:
-                    action.payload.stopLossPrice <= action.payload.entryPrice
-                        ? TradeType.LONG
-                        : TradeType.SHORT,
-                entryPrice: action.payload.entryPrice,
+                type: getOrderType(
+                    state.currentCandle?.close!,
+                    action.payload.entryPrice,
+                    action.payload.stopLossPrice
+                ),
+                price: action.payload.entryPrice,
                 stopLossPrice: action.payload.stopLossPrice,
-                closePrice: undefined,
-                profit: undefined,
             });
         },
     },
@@ -154,5 +156,5 @@ export const {
     changedTradePrice,
     closeTrade,
     stopLossUpdated,
-    openFixedRiskPosition,
+    addFixedRiskOrder,
 } = tradeSlice.actions;
