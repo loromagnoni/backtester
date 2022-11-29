@@ -26,7 +26,6 @@ export const App = () => (
         <ChakraProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <ModalProvider>
-                    <CustomizePositionModal />
                     <HomeLayout />
                 </ModalProvider>
             </QueryClientProvider>

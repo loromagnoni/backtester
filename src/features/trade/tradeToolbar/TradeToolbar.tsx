@@ -6,22 +6,28 @@ import {
     DrawerHeader,
     DrawerOverlay,
     HStack,
-    useDisclosure,
 } from '@chakra-ui/react';
 import {
     OpenLongPositionButton,
     OpenShortPositionButton,
     TradeList,
 } from 'features/trade';
+import { useContext } from 'react';
 import {
     CustomizePositionButton,
     ExitFixedRiskPositionButton,
 } from '../customizePosition';
+import { CustomizePositionModal } from '../customizePosition/customizePositionModal/CustomizePositionModal';
+import { useCreateFixedPosition } from '../customizePosition/customizePositionModal/useCreateFixedPosition';
+import { useFixedPositionSizeMode } from '../customizePosition/customizePositionModal/useFixedPositionSizeModel';
 import { PositionSizeSelector } from '../positionSize';
 import { TradeModal } from '../tradeModal/EditTradeModal';
+import { DrawerContext, DrawerProvider } from './DrawerContext';
 
-export const TradeToolbar = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+const WithDrawerContext = () => {
+    const { onOpen, onClose, isOpen } = useContext(DrawerContext);
+    useFixedPositionSizeMode();
+    useCreateFixedPosition();
     return (
         <>
             <Button onClick={onOpen}>Trade Toolbar</Button>
@@ -41,9 +47,18 @@ export const TradeToolbar = () => {
                         <CustomizePositionButton />
                         <TradeList />
                         <TradeModal />
+                        <CustomizePositionModal />
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
         </>
+    );
+};
+
+export const TradeToolbar = () => {
+    return (
+        <DrawerProvider>
+            <WithDrawerContext />
+        </DrawerProvider>
     );
 };

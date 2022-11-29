@@ -61,13 +61,13 @@ type PriceLineOptions = {
     title: string;
 };
 
-export const addPriceLine = ({
-    price,
-    color,
-    lineStyle,
-    title,
-}: PriceLineOptions) => {
-    const priceLine = serie?.createPriceLine({
+const createPriceLine = (
+    price: number,
+    color: string,
+    lineStyle: LineStyle,
+    title: string
+) => {
+    return serie?.createPriceLine({
         price,
         color,
         lineWidth: 1,
@@ -77,6 +77,15 @@ export const addPriceLine = ({
         draggable: true,
         title: title,
     });
+};
+
+export const addPriceLine = ({
+    price,
+    color,
+    lineStyle,
+    title,
+}: PriceLineOptions) => {
+    const priceLine = createPriceLine(price, color, lineStyle, title);
     priceLines.push(priceLine!);
 };
 
@@ -272,4 +281,22 @@ export const chartUnsubscribeAllClick = () => {
 
 export const getPriceAtY = (y: number) => {
     return serie?.coordinateToPrice(y);
+};
+
+let selectedPriceLine: IPriceLine | undefined;
+
+export const setSelectedPriceLine = (price?: number) => {
+    if (price) {
+        selectedPriceLine = createPriceLine(
+            price,
+            '#696969',
+            LineStyle.Dotted,
+            'Selected price'
+        );
+    } else {
+        if (selectedPriceLine) {
+            serie?.removePriceLine(selectedPriceLine);
+        }
+        selectedPriceLine = undefined;
+    }
 };

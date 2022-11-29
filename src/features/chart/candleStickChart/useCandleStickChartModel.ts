@@ -16,6 +16,7 @@ import { usePriceLines } from './usePriceLines';
 import { usePositionLines } from './usePositionLines';
 import { useResetChart } from './useResetChart';
 import { useLastCandle } from './useLastCandle';
+import { useSelectedPriceLine } from './useSelectedPriceLine';
 
 export const colors = {
     priceFormat: {
@@ -61,6 +62,7 @@ export const useCandleStickChartModel = () => {
     usePositionLines();
     useResetChart();
     useLastCandle();
+    useSelectedPriceLine();
 
     useEffect(() => {
         const handleResize = () => {
