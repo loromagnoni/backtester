@@ -13,9 +13,7 @@ export const useEditTradeModalModel = () => {
     const { isOpen, onClose } = useModal(Modal.EditPosition);
     const dispatch = useAppDispatch();
     const trade = useAppSelector((state) =>
-        state.trade.openPositions.find(
-            (t) => t.id === state.trade.selectedTradeId
-        )
+        state.trade.openOrders.find((t) => t.id === state.trade.selectedTradeId)
     );
     const onCloseTradeClick = useCallback(() => {
         dispatch(closeTrade(trade!.id));

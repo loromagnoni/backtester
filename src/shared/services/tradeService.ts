@@ -1,37 +1,32 @@
 import { truncateDecimals } from 'core/converter';
 
-export enum TradeType {
-    LONG = 'long',
-    SHORT = 'short',
+export enum OrderDirection {
+    LONG,
+    SHORT,
 }
 
 export enum OrderType {
-    TP = 'TP',
-    SL = 'SL',
-    SELL_LIMIT = 'SELL_LIMIT',
-    BUY_LIMIT = 'BUY_LIMIT',
-    SELL_STOP = 'SELL_STOP',
-    BUY_STOP = 'BUY_STOP',
+    TAKE_PROFIT,
+    STOP_LOSS,
+    MARKET_LONG,
+    MARLET_SHORT,
+    SELL_LIMIT,
+    BUY_LIMIT,
+    SELL_STOP,
+    BUY_STOP,
 }
-
-export type Trade = {
-    id: string;
-    entryTimestamp: number;
-    entryPrice: number;
-    takeProfitPrice?: number;
-    stopLossPrice?: number;
-    closePrice: number | undefined;
-    profit: number | undefined;
-    type: TradeType;
-};
 
 export type Order = {
     id: string;
     creationTimestamp: number;
+    triggeredTimestamp?: number;
+    isTriggered: boolean;
     price: number;
     type: OrderType;
     takeProfitPrice?: number;
     stopLossPrice?: number;
+    closePrice?: number;
+    profit?: number;
 };
 
 let incremental = 0;
@@ -54,19 +49,35 @@ export const getOrderType = (
         : OrderType.BUY_LIMIT;
 };
 
-export const calculateProfit = (trade: Trade, currentPrice: number): number => {
+export const isTriggered = (o: Pick<Order, 'isTriggered'>) => o.isTriggered;
+export const isPendingOrder = (o: Pick<Order, 'isTriggered'>) => !o.isTriggered;
+
+export const getOrderDirection = (o: Pick<Order, 'type'>): OrderDirection =>
+    [OrderType.BUY_LIMIT, OrderType.BUY_STOP, OrderType.MARKET_LONG].includes(
+        o.type
+    )
+        ? OrderDirection.LONG
+        : OrderDirection.SHORT;
+
+export const calculateProfit = (order: Order, currentPrice: number): number => {
     return truncateDecimals(
-        (trade.entryPrice - currentPrice) *
-            (trade.type === TradeType.SHORT ? 1 : -1) *
+        (order.price - currentPrice) *
+            (getOrderDirection(order) === OrderDirection.SHORT ? 1 : -1) *
             100000,
         2
     );
 };
 
-export const hasToBeClosed = (t: Trade, currentPrice: number): boolean =>
-    (t.type === TradeType.LONG &&
-        ((!!t.takeProfitPrice && t.takeProfitPrice <= currentPrice) ||
-            (!!t.stopLossPrice && t.stopLossPrice >= currentPrice))) ||
-    (t.type === TradeType.SHORT &&
-        ((!!t.takeProfitPrice && t.takeProfitPrice >= currentPrice) ||
-            (!!t.stopLossPrice && t.stopLossPrice <= currentPrice)));
+export const hasToBeClosed = (o: Order, currentPrice: number): boolean =>
+    (getOrderDirection(o) === OrderDirection.LONG &&
+        ((!!o.takeProfitPrice && o.takeProfitPrice <= currentPrice) ||
+            (!!o.stopLossPrice && o.stopLossPrice >= currentPrice))) ||
+    (getOrderDirection(o) === OrderDirection.SHORT &&
+        ((!!o.takeProfitPrice && o.takeProfitPrice >= currentPrice) ||
+            (!!o.stopLossPrice && o.stopLossPrice <= currentPrice)));
+
+export const hasToBeTriggered = (o: Order, currentPrice: number): boolean =>
+    ([OrderType.SELL_STOP, OrderType.BUY_LIMIT].includes(o.type) &&
+        o.price >= currentPrice) ||
+    ([OrderType.SELL_LIMIT, OrderType.BUY_STOP].includes(o.type) &&
+        o.price <= currentPrice);

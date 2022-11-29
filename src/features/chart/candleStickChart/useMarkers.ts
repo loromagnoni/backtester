@@ -5,22 +5,28 @@ import {
     getSellMarker,
     updateMarkers,
 } from 'shared/services/chartService';
-import { Trade, TradeType } from 'shared/services/tradeService';
+import {
+    getOrderDirection,
+    isTriggered,
+    Order,
+    OrderDirection,
+} from 'shared/services/tradeService';
 
 import { useAppSelector } from 'shared/store';
 
-const markerAdapter = (trade: Trade) => {
-    const { id, entryTimestamp, entryPrice, type } = trade;
-    if (type === TradeType.LONG) {
-        return getBuyMarker(id, entryTimestamp, 1.0, entryPrice);
+const markerAdapter = (trade: Order) => {
+    const { id, triggeredTimestamp, price } = trade;
+    if (getOrderDirection(trade) === OrderDirection.LONG) {
+        return getBuyMarker(id, triggeredTimestamp, 1.0, price);
     } else {
-        return getSellMarker(id, entryTimestamp, 1.0, entryPrice);
+        return getSellMarker(id, triggeredTimestamp, 1.0, price);
     }
 };
 
 const useTradeMarkers = () =>
     useAppSelector(
-        (state) => state.trade.openPositions.map(markerAdapter),
+        (state) =>
+            state.trade.openOrders.filter(isTriggered).map(markerAdapter),
         shallowEqualArray
     );
 
@@ -28,6 +34,7 @@ export const useMarkers = () => {
     const markers = useTradeMarkers();
 
     useEffect(() => {
+        console.log('update markerAdapter');
         updateMarkers(markers);
     }, [markers]);
 };

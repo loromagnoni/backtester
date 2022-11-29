@@ -9,6 +9,7 @@ import {
     ModalHeader,
     ModalOverlay,
 } from '@chakra-ui/react';
+import { getStringFromOrderType } from 'shared/services/chartService';
 import { useEditTradeModalModel } from './useEditTradeModalModel';
 
 export const TradeModal = () => {
@@ -28,52 +29,56 @@ export const TradeModal = () => {
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>{`${trade?.type} @ ${trade?.entryPrice}`}</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        Trade profit: <b>{trade?.profit}</b>
-                        <Button
-                            colorScheme="red"
-                            mr={3}
-                            onClick={onCloseTradeClick}
-                        >
-                            Close trade
-                        </Button>
-                        <Input
-                            placeholder="TP"
-                            type={'number'}
-                            value={takeProfitInputValue}
-                            onChange={onTakeProfitInputChange}
-                        ></Input>
-                        <Button
-                            colorScheme="blue"
-                            mr={3}
-                            onClick={onSaveTakeProfitClick}
-                        >
-                            Save Take Profit
-                        </Button>
-                        <Input
-                            placeholder="SL"
-                            type={'number'}
-                            value={stopLossInputValue}
-                            onChange={onStopLossInputChange}
-                        ></Input>
-                        <Button
-                            colorScheme="blue"
-                            mr={3}
-                            onClick={onSaveStopLossClick}
-                        >
-                            Save Stop Loss
-                        </Button>
-                    </ModalBody>
+                {trade && (
+                    <ModalContent>
+                        <ModalHeader>{`${getStringFromOrderType(
+                            trade.type
+                        )} @ ${trade?.price}`}</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            Trade profit: <b>{trade?.profit}</b>
+                            <Button
+                                colorScheme="red"
+                                mr={3}
+                                onClick={onCloseTradeClick}
+                            >
+                                Close trade
+                            </Button>
+                            <Input
+                                placeholder="TP"
+                                type={'number'}
+                                value={takeProfitInputValue}
+                                onChange={onTakeProfitInputChange}
+                            ></Input>
+                            <Button
+                                colorScheme="blue"
+                                mr={3}
+                                onClick={onSaveTakeProfitClick}
+                            >
+                                Save Take Profit
+                            </Button>
+                            <Input
+                                placeholder="SL"
+                                type={'number'}
+                                value={stopLossInputValue}
+                                onChange={onStopLossInputChange}
+                            ></Input>
+                            <Button
+                                colorScheme="blue"
+                                mr={3}
+                                onClick={onSaveStopLossClick}
+                            >
+                                Save Stop Loss
+                            </Button>
+                        </ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
+                        <ModalFooter>
+                            <Button colorScheme="blue" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                        </ModalFooter>
+                    </ModalContent>
+                )}
             </Modal>
         </>
     );

@@ -1,4 +1,4 @@
-import { changedTradePrice, useAppDispatch } from 'shared/store';
+import { changedOrderPrice, useAppDispatch } from 'shared/store';
 
 import { ColorType, createChart, CrosshairMode } from 'core/lightweight-chart';
 import { useEffect, useRef } from 'react';
@@ -87,7 +87,7 @@ export const useCandleStickChartModel = () => {
         chart?.timeScale().fitContent();
         chart?.subscribeCustomPriceLineDragged((p) =>
             dispatch(
-                changedTradePrice({
+                changedOrderPrice({
                     tradeId: getTradeIdFromPriceLine(p),
                     newPrice: getPriceFromPriceLine(p),
                     orderType: getOrderTypeFromPriceLine(p),

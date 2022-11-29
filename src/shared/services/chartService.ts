@@ -1,3 +1,5 @@
+import { fan } from 'core/functional/fan';
+import { swap } from 'core/functional/swap';
 import {
     CandlestickData,
     CustomPriceLineDraggedEventParams,
@@ -11,7 +13,7 @@ import {
     SeriesMarkerShape,
     WhitespaceData,
 } from 'core/lightweight-chart';
-import { Order, OrderType, Trade } from './tradeService';
+import { isPendingOrder, isTriggered, Order, OrderType } from './tradeService';
 
 export let serie: ISeriesApi<'Candlestick'> | undefined;
 export let chart: IChartApi | undefined;
@@ -119,20 +121,20 @@ export const getSellMarker = (
     };
 };
 
-export const drawTakeProfitLine = (
-    t: Pick<Trade, 'id' | 'takeProfitPrice'>
+export const drawTriggeredOrderTakeProfitLine = (
+    t: Pick<Order, 'id' | 'takeProfitPrice'>
 ) => {
     if (t.takeProfitPrice) {
         addPriceLine({
             price: t.takeProfitPrice,
             color: '#4bffb5',
             lineStyle: LineStyle.Solid,
-            title: getPriceLineTitle(t.id, OrderType.TP),
+            title: getPriceLineTitle(t.id, OrderType.TAKE_PROFIT),
         });
     }
 };
 
-export const drawOrderTakeProfitLine = (
+export const drawPendingOrderTakeProfitLine = (
     t: Pick<Order, 'id' | 'takeProfitPrice'>
 ) => {
     if (t.takeProfitPrice) {
@@ -140,11 +142,11 @@ export const drawOrderTakeProfitLine = (
             price: t.takeProfitPrice,
             color: '#4bffb5',
             lineStyle: LineStyle.Dotted,
-            title: getPriceLineTitle(t.id, OrderType.TP),
+            title: getPriceLineTitle(t.id, OrderType.TAKE_PROFIT),
         });
     }
 };
-export const drawOrderStopLossLine = (
+export const drawPendingOrderStopLossLine = (
     t: Pick<Order, 'id' | 'stopLossPrice'>
 ) => {
     if (t.stopLossPrice) {
@@ -152,18 +154,20 @@ export const drawOrderStopLossLine = (
             price: t.stopLossPrice,
             color: '#ff4b4b',
             lineStyle: LineStyle.Dotted,
-            title: getPriceLineTitle(t.id, OrderType.SL),
+            title: getPriceLineTitle(t.id, OrderType.STOP_LOSS),
         });
     }
 };
 
-export const drawStopLossLine = (t: Pick<Trade, 'id' | 'stopLossPrice'>) => {
+export const drawTriggeredOrderStopLossLine = (
+    t: Pick<Order, 'id' | 'stopLossPrice'>
+) => {
     if (t.stopLossPrice) {
         addPriceLine({
             price: t.stopLossPrice,
             color: '#ff4b4b',
             lineStyle: LineStyle.Solid,
-            title: getPriceLineTitle(t.id, OrderType.SL),
+            title: getPriceLineTitle(t.id, OrderType.STOP_LOSS),
         });
     }
 };
@@ -179,10 +183,9 @@ export const drawPriceLine = (o: Pick<Order, 'id' | 'price' | 'type'>) => {
 
 export const getPriceLineTitle = (
     tradeId: string,
-    orderType?: OrderType
+    orderType: OrderType
 ): string => {
-    const orderTypeString = orderType ?? '';
-    return `#${tradeId} ${orderTypeString}`;
+    return `#${tradeId} ${getStringFromOrderType(orderType)}`;
 };
 
 export const getTradeIdFromPriceLine = (
@@ -196,26 +199,63 @@ export const getPriceFromPriceLine = (
 
 export const getOrderTypeFromPriceLine = (
     p: CustomPriceLineDraggedEventParams
-): OrderType | undefined => {
+): OrderType => {
     const title = p.customPriceLine.options().title;
-    const orderType = title.split(' ')[1];
-    if (orderType) return orderType as OrderType;
-    return undefined;
+    const orderTypeString = title
+        .split(' ')
+        .slice(1)
+        .join(' ') as keyof typeof orderTypeStringMap;
+    return getOrderTypeFromString(orderTypeString);
 };
 
+const orderTypeStringMap = {
+    long: OrderType.MARKET_LONG,
+    short: OrderType.MARLET_SHORT,
+    'buy limit': OrderType.BUY_LIMIT,
+    'buy stop': OrderType.BUY_STOP,
+    'sell limit': OrderType.SELL_LIMIT,
+    'sell stop': OrderType.SELL_STOP,
+    'take profit': OrderType.TAKE_PROFIT,
+    'stop loss': OrderType.STOP_LOSS,
+};
+
+const getOrderTypeFromString = (
+    s: keyof typeof orderTypeStringMap
+): OrderType => orderTypeStringMap[s];
+
+export const getStringFromOrderType = (
+    t: OrderType
+): keyof typeof orderTypeStringMap => swap(orderTypeStringMap)[t];
+
 export const updatePriceLines = (
-    openPositions: Pick<Trade, 'id' | 'takeProfitPrice' | 'stopLossPrice'>[],
-    limitOrders: Pick<
+    openOrders: Pick<
         Order,
-        'id' | 'takeProfitPrice' | 'stopLossPrice' | 'price' | 'type'
+        | 'id'
+        | 'takeProfitPrice'
+        | 'stopLossPrice'
+        | 'isTriggered'
+        | 'price'
+        | 'type'
     >[]
 ) => {
     clearPriceLines();
-    openPositions.forEach(drawTakeProfitLine);
-    openPositions.forEach(drawStopLossLine);
-    limitOrders.forEach(drawPriceLine);
-    limitOrders.forEach(drawOrderTakeProfitLine);
-    limitOrders.forEach(drawOrderStopLossLine);
+    openOrders
+        .filter(isTriggered)
+        .forEach(
+            fan(
+                drawTriggeredOrderTakeProfitLine,
+                drawTriggeredOrderStopLossLine
+            )
+        );
+    openOrders
+        .filter(isPendingOrder)
+        .forEach(
+            fan(
+                drawPendingOrderStopLossLine,
+                drawPendingOrderTakeProfitLine,
+                drawPriceLine
+            )
+        );
 };
 
 const clickSubscribers: MouseEventHandler[] = [];

@@ -6,87 +6,126 @@ import {
     generateTradeId,
     getOrderType,
     hasToBeClosed,
+    hasToBeTriggered,
+    isPendingOrder,
+    isTriggered,
     Order,
     OrderType,
-    Trade,
-    TradeType,
 } from 'shared/services/tradeService';
 import { RootState } from './store';
 
 export const totalProfitSelector = (state: RootState) =>
     truncateDecimals(
-        state.trade.openPositions.reduce(
+        state.trade.openOrders.reduce(
             (acc, trade) => acc + (trade.profit ?? 0),
             0
         ),
         2
     );
 
-const closePosition = (
+const closeOrder = (
     state: ReturnType<typeof tradeSlice.getInitialState>,
     tradeId: string
 ) => {
-    const toClose = state.openPositions.find((t) => t.id === tradeId)!;
-    state.closedPositions.push(toClose);
-    state.openPositions = state.openPositions.filter((t) => t.id !== tradeId);
+    const toClose = state.openOrders.find((t) => t.id === tradeId)!;
+    state.closedOrders.push(toClose);
+    state.openOrders = state.openOrders.filter((t) => t.id !== tradeId);
+};
+
+const openOrder = (
+    state: ReturnType<typeof tradeSlice.getInitialState>,
+    tradeId: string
+) => {
+    state.openOrders.forEach((o) => {
+        if (o.id === tradeId) {
+            o.isTriggered = true;
+            o.triggeredTimestamp = new Date(
+                state.currentCandle!.time as string
+            ).getTime();
+        }
+    });
 };
 
 const maybeClosePosition = (
     state: ReturnType<typeof tradeSlice.getInitialState>,
     currentPrice: number
 ) => {
-    state.openPositions
+    state.openOrders
+        .filter(isTriggered)
         .filter((t) => hasToBeClosed(t, currentPrice))
-        .forEach((t) => closePosition(state, t.id));
+        .forEach((t) => closeOrder(state, t.id));
+};
+
+const maybeOpenPosition = (
+    state: ReturnType<typeof tradeSlice.getInitialState>,
+    currentPrice: number
+) => {
+    state.openOrders
+        .filter(isPendingOrder)
+        .filter((t) => hasToBeTriggered(t, currentPrice))
+        .forEach((t) => openOrder(state, t.id));
 };
 
 export const tradeSlice = createSlice({
     name: 'trade',
     initialState: {
-        openPositions: [] as Trade[],
-        closedPositions: [] as Trade[],
-        limitOrders: [] as Order[],
+        openOrders: [] as Order[],
+        closedOrders: [] as Order[],
         currentCandle: undefined as CandlestickData | undefined,
         selectedTradeId: undefined as string | undefined,
     },
     reducers: {
         changeCurrentPrice: (state, action: PayloadAction<CandlestickData>) => {
             state.currentCandle = action.payload;
-            state.openPositions.forEach((p) => {
+            state.openOrders.filter(isTriggered).forEach((p) => {
                 p.profit = calculateProfit(p, action.payload.close);
             });
             maybeClosePosition(state, action.payload.close);
+            maybeOpenPosition(state, action.payload.close);
         },
-        changedTradePrice: (
+        changedOrderPrice: (
             state,
             action: PayloadAction<{
                 tradeId: string;
                 newPrice: number;
-                orderType?: OrderType;
+                orderType: OrderType;
             }>
         ) => {
-            const trade = state.openPositions.find(
+            const trade = state.openOrders.find(
                 (p) => p.id === action.payload.tradeId
             );
             if (trade) {
-                if (action.payload.orderType === OrderType.TP) {
+                if (action.payload.orderType === OrderType.TAKE_PROFIT) {
                     trade.takeProfitPrice = action.payload.newPrice;
                 }
-                if (action.payload.orderType === OrderType.SL) {
+                if (action.payload.orderType === OrderType.STOP_LOSS) {
                     trade.stopLossPrice = action.payload.newPrice;
+                }
+                if (
+                    [
+                        OrderType.SELL_LIMIT,
+                        OrderType.BUY_LIMIT,
+                        OrderType.SELL_STOP,
+                        OrderType.BUY_STOP,
+                    ].includes(action.payload.orderType)
+                ) {
+                    trade.price = action.payload.newPrice;
                 }
             }
         },
-        openLongPosition: (state) => {
+        openMarketLong: (state) => {
             if (state.currentCandle) {
+                const t = new Date(
+                    state.currentCandle.time as string
+                ).getTime();
                 const id = generateTradeId();
-                state.openPositions.push({
+                state.openOrders.push({
                     id,
-                    entryTimestamp: new Date(
-                        state.currentCandle.time as string
-                    ).getTime(),
-                    type: TradeType.LONG,
-                    entryPrice: state.currentCandle.close,
+                    creationTimestamp: t,
+                    triggeredTimestamp: t,
+                    type: OrderType.MARKET_LONG,
+                    isTriggered: true,
+                    price: state.currentCandle.close,
                     closePrice: undefined,
                     profit: undefined,
                 });
@@ -96,30 +135,33 @@ export const tradeSlice = createSlice({
             state.selectedTradeId = action.payload;
         },
         closeTrade: (state, action: PayloadAction<string>) => {
-            closePosition(state, action.payload);
+            closeOrder(state, action.payload);
         },
         takeProfitUpdated: (state, action: PayloadAction<number>) => {
-            const selectedTrade = state.openPositions.find(
+            const selectedTrade = state.openOrders.find(
                 (t) => t.id === state.selectedTradeId
             )!;
             selectedTrade.takeProfitPrice = action.payload;
         },
         stopLossUpdated: (state, action: PayloadAction<number>) => {
-            const selectedTrade = state.openPositions.find(
+            const selectedTrade = state.openOrders.find(
                 (t) => t.id === state.selectedTradeId
             )!;
             selectedTrade.stopLossPrice = action.payload;
         },
-        openShortPosition: (state) => {
+        openMarketShort: (state) => {
             if (state.currentCandle) {
+                const t = new Date(
+                    state.currentCandle.time as string
+                ).getTime();
                 const id = generateTradeId();
-                state.openPositions.push({
+                state.openOrders.push({
                     id,
-                    entryTimestamp: new Date(
-                        state.currentCandle.time as string
-                    ).getTime(),
-                    type: TradeType.SHORT,
-                    entryPrice: state.currentCandle.close,
+                    triggeredTimestamp: t,
+                    creationTimestamp: t,
+                    type: OrderType.MARLET_SHORT,
+                    isTriggered: true,
+                    price: state.currentCandle.close,
                     closePrice: undefined,
                     profit: undefined,
                 });
@@ -130,11 +172,11 @@ export const tradeSlice = createSlice({
             action: PayloadAction<{ entryPrice: number; stopLossPrice: number }>
         ) => {
             const id = generateTradeId();
-            state.limitOrders.push({
+            const t = new Date(state.currentCandle!.time as string).getTime();
+            state.openOrders.push({
                 id,
-                creationTimestamp: new Date(
-                    state.currentCandle!.time as string
-                ).getTime(),
+                creationTimestamp: t,
+                isTriggered: false,
                 type: getOrderType(
                     state.currentCandle?.close!,
                     action.payload.entryPrice,
@@ -148,12 +190,12 @@ export const tradeSlice = createSlice({
 });
 
 export const {
-    openLongPosition,
-    openShortPosition,
+    openMarketLong,
+    openMarketShort,
     changeCurrentPrice,
     takeProfitUpdated,
     tradeSelected,
-    changedTradePrice,
+    changedOrderPrice,
     closeTrade,
     stopLossUpdated,
     addFixedRiskOrder,

@@ -1,27 +1,22 @@
 import { shallowEqualArray } from 'core/shallowEqualArray';
 import { useEffect } from 'react';
 import { updatePriceLines } from 'shared/services/chartService';
-import { Trade } from 'shared/services/tradeService';
 import { useAppSelector } from 'shared/store';
 
-const limitOrderAdapter = (trade: Trade) => {
-    const { takeProfitPrice, stopLossPrice, id } = trade;
-    return { takeProfitPrice, stopLossPrice, id };
-};
-
-const useOpenPositionsLimitOrders = () =>
-    useAppSelector(
-        (state) => state.trade.openPositions.map(limitOrderAdapter),
+export const usePriceLines = () => {
+    const orders = useAppSelector(
+        (state) =>
+            state.trade.openOrders.map((o) => ({
+                id: o.id,
+                isTriggered: o.isTriggered,
+                takeProfitPrice: o.takeProfitPrice,
+                stopLossPrice: o.stopLossPrice,
+                price: o.price,
+                type: o.type,
+            })),
         shallowEqualArray
     );
-
-const useLimitOrders = () =>
-    useAppSelector((state) => state.trade.limitOrders, shallowEqualArray);
-
-export const usePriceLines = () => {
-    const limitOrdersPositions = useOpenPositionsLimitOrders();
-    const limitOrders = useLimitOrders();
     useEffect(() => {
-        updatePriceLines(limitOrdersPositions, limitOrders);
-    }, [limitOrders, limitOrdersPositions]);
+        updatePriceLines(orders);
+    }, [orders]);
 };

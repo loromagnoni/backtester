@@ -1,16 +1,17 @@
 import { Td, Tr } from '@chakra-ui/react';
-import { Trade } from 'shared/services/tradeService';
+import { getStringFromOrderType } from 'shared/services/chartService';
+import { Order } from 'shared/services/tradeService';
 
 type TradeItemProps = {
-    trade: Trade;
-    onClick: (t: Trade) => void;
+    trade: Order;
+    onClick: (t: Order) => void;
 };
 
 export const TradeItem = ({ trade, onClick }: TradeItemProps) => {
     return (
         <Tr onClick={() => onClick(trade)}>
-            <Td>{trade.entryPrice}</Td>
-            <Td>{trade.type}</Td>
+            <Td>{trade.price}</Td>
+            <Td>{getStringFromOrderType(trade.type)}</Td>
             <Td isNumeric>{trade.profit}</Td>
         </Tr>
     );

@@ -2,7 +2,7 @@ import { Modal } from 'App';
 import { useModal } from 'core/modal';
 import { useThrottle } from 'core/render';
 import { useCallback } from 'react';
-import { Trade } from 'shared/services/tradeService';
+import { Order } from 'shared/services/tradeService';
 import {
     totalProfitSelector,
     tradeSelected,
@@ -11,12 +11,12 @@ import {
 } from 'shared/store';
 
 export const useTradeListModel = () => {
-    const trades = useAppSelector((state) => state.trade.openPositions);
+    const trades = useAppSelector((state) => state.trade.openOrders);
     const { onOpen } = useModal(Modal.EditPosition);
     const dispatch = useAppDispatch();
     const onItemClick = useCallback(
-        (trade: Trade) => {
-            dispatch(tradeSelected(trade.id));
+        (order: Order) => {
+            dispatch(tradeSelected(order.id));
             onOpen();
         },
         [dispatch, onOpen]
