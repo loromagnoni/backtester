@@ -8,21 +8,27 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { CandlestickData } from 'core/lightweight-chart/lightweight-charts.js';
 import { useCallback } from 'react';
+import { setTicker } from 'shared/store/dataLoaderSlice';
 
 export const useAssetSelectorModel = () => {
     const dispatch = useAppDispatch();
-    const selectedAsset = useAppSelector((state) => state.app.asset);
+    const lastChunk = useAppSelector((state) => state.dataLoader.lastChunk);
     const onChange = useCallback(
-        (e: React.ChangeEvent<HTMLSelectElement>) =>
-            dispatch(assetSelected(e.target.value)),
+        (e: React.ChangeEvent<HTMLSelectElement>) => {
+            dispatch(assetSelected(e.target.value));
+            dispatch(setTicker(e.target.value));
+        },
         [dispatch]
     );
     const onSuccess = useCallback(
-        (serie: CandlestickData[]) => dispatch(setAssetSeries(serie)),
+        (serie: CandlestickData[]) => {
+            console.log(`Got data! Length: ${serie.length}`);
+            dispatch(setAssetSeries(serie));
+        },
         [dispatch]
     );
 
-    useQuery(['selectedAsset', selectedAsset], assetQuery(selectedAsset), {
+    useQuery([JSON.stringify(lastChunk)], assetQuery(lastChunk), {
         onSuccess: onSuccess,
     });
 

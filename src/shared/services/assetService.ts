@@ -3,6 +3,8 @@ import {
     CandleStickSerieData,
     onlyOpenMarketHours,
 } from 'shared/services/candleCalculatorService';
+import { DataChunk } from 'shared/store/dataLoaderSlice';
+import { loadAssetData } from './assetLoaderService';
 
 export const tickers = Array.from(new Set(assets.map((asset) => asset.ticker)));
 
@@ -20,7 +22,7 @@ const dateConverter = (d: string): number => {
     );
 };
 
-const chartAdapter = (data: any): CandleStickSerieData => {
+export const chartAdapter = (data: any): CandleStickSerieData => {
     return data.map((item: any) => ({
         time: dateConverter(item['Gmt time']),
         open: item.Open,
@@ -30,11 +32,7 @@ const chartAdapter = (data: any): CandleStickSerieData => {
     }));
 };
 
-export const assetQuery = (selectedAsset?: AssetData) => async () => {
-    if (selectedAsset) {
-        const response = await fetch(selectedAsset.url);
-        const data = chartAdapter(await response.json());
-        const filtered = data.filter(onlyOpenMarketHours);
-        return filtered;
-    } else return [];
+export const assetQuery = (chunk: DataChunk) => async () => {
+    if (chunk.ticker && chunk.month) return loadAssetData(chunk);
+    return [];
 };

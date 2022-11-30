@@ -1,5 +1,6 @@
 import { selectReplayDate, useAppDispatch, useAppSelector } from 'shared/store';
 import { useCallback } from 'react';
+import { setReplayDate } from 'shared/store/dataLoaderSlice';
 
 export const useTimeSelectorModel = () => {
     const dispatch = useAppDispatch();
@@ -12,6 +13,7 @@ export const useTimeSelectorModel = () => {
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const newDate = new Date(e.target.value);
             dispatch(selectReplayDate(newDate.getTime()));
+            dispatch(setReplayDate(newDate.getTime()));
         },
         [dispatch]
     );

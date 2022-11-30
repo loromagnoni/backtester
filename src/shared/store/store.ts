@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { appSlice } from './appSlice';
+import { dataLoaderSlice } from './dataLoaderSlice';
 import { fixedRiskPositionSlice } from './fixedRiskPositionSlice';
 import { tradeSlice } from './tradeSlice';
 
@@ -8,6 +9,7 @@ export const store = configureStore({
         app: appSlice.reducer,
         trade: tradeSlice.reducer,
         fixedRiskPositionMode: fixedRiskPositionSlice.reducer,
+        dataLoader: dataLoaderSlice.reducer,
     },
 });
 
