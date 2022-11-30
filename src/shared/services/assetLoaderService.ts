@@ -10,16 +10,10 @@ export const loadAssetData = async (chunk: DataChunk) => {
         chunk.month!
     )}.json`;
     const data = await fetch(url);
-    console.log('fetched', url);
-    try {
-        const json = await data.json();
-        console.log('parsed', json.length);
-        const chartAdapted = chartAdapter(json);
-        const filtered = chartAdapted.filter(onlyOpenMarketHours);
-        return filtered;
-    } catch (e) {
-        console.error(e);
-    }
+    const json = await data.json();
+    const chartAdapted = chartAdapter(json);
+    const filtered = chartAdapted.filter(onlyOpenMarketHours);
+    return filtered;
 };
 
 export const getNextMonthToLoad = (year: number, month: number) => {

@@ -7,7 +7,6 @@ import { enterCreateFixedRiskPositionMode } from 'shared/store/fixedRiskPosition
 export const useFixedRiskPositionButtonModel = () => {
     const { onClose } = useModal();
     const d = useContext(DrawerContext);
-    console.log(d);
     const dispatch = useAppDispatch();
     const onClick = useCallback(() => {
         dispatch(enterCreateFixedRiskPositionMode());

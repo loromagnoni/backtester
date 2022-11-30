@@ -37,6 +37,9 @@ export const appSlice = createSlice({
             state.lastCandle = action.payload.candle;
             state.index = action.payload.initialIndex;
         },
+        appendAssetSerie: (state, action: PayloadAction<CandlestickData[]>) => {
+            state.assetSerie = [...state.assetSerie, ...action.payload];
+        },
         setAssetSeries: (state, action: PayloadAction<CandlestickData[]>) => {
             state.assetSerie = action.payload;
         },
@@ -80,6 +83,7 @@ export const appSlice = createSlice({
 });
 
 export const {
+    appendAssetSerie,
     setAssetSeries,
     selectTimeframe,
     assetSelected,

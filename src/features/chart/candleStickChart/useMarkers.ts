@@ -34,7 +34,6 @@ export const useMarkers = () => {
     const markers = useTradeMarkers();
 
     useEffect(() => {
-        console.log('update markerAdapter');
         updateMarkers(markers);
     }, [markers]);
 };

@@ -1,9 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-const minutesInAWeek = 60 * 24 * 7;
-
-const getNeedReload = (dataLength: number, index: number) =>
-    dataLength - index < minutesInAWeek;
+import { getNextMonthToLoad } from 'shared/services/assetLoaderService';
 
 export type DataChunk = {
     month: number | undefined;
@@ -14,11 +10,25 @@ export type DataChunk = {
 export const dataLoaderSlice = createSlice({
     name: 'dataLoader',
     initialState: {
-        dataLength: 0,
-        currentIndex: 0,
         lastChunk: {} as DataChunk,
+        needsReload: false,
+        isLoading: false,
     },
     reducers: {
+        setIsLoading: (state, action: PayloadAction<boolean>) => {
+            console.log('isloading', action.payload);
+            state.isLoading = action.payload;
+        },
+        loadNextChunk: (state) => {
+            state.lastChunk = {
+                ...getNextMonthToLoad(
+                    state.lastChunk.year!,
+                    state.lastChunk.month!
+                ),
+                ticker: state.lastChunk.ticker,
+            };
+            state.needsReload = true;
+        },
         setReplayDate: (state, action: PayloadAction<number>) => {
             const d = new Date(action.payload);
             state.lastChunk = {
@@ -26,6 +36,7 @@ export const dataLoaderSlice = createSlice({
                 year: d.getFullYear(),
                 ticker: state.lastChunk?.ticker,
             };
+            state.needsReload = false;
         },
         setTicker: (state, action: PayloadAction<string>) => {
             state.lastChunk = {
@@ -33,8 +44,10 @@ export const dataLoaderSlice = createSlice({
                 year: state.lastChunk?.year,
                 ticker: action.payload,
             };
+            state.needsReload = false;
         },
     },
 });
 
-export const { setTicker, setReplayDate } = dataLoaderSlice.actions;
+export const { setTicker, setReplayDate, loadNextChunk, setIsLoading } =
+    dataLoaderSlice.actions;
