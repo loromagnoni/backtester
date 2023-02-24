@@ -1,5 +1,12 @@
 {
-  "ignorePatterns": ["build", "public", "src-old"],
+  "ignorePatterns": [
+    "build",
+    "public",
+    "src/fetures",
+    "src/shared",
+    "src/layout",
+    "src/ui"
+  ],
   "env": {
     "browser": true,
     "es2021": true,
@@ -9,7 +16,8 @@
     "airbnb",
     "airbnb-typescript",
     "plugin:import/typescript",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
