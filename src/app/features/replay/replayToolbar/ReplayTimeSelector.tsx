@@ -5,12 +5,13 @@ import useReplayDate from 'app/hooks/useReplayDate';
 export default function ReplayTimeSelector() {
   const replayDate = useReplayDate();
   const changeReplayDate = useChangeReplayDate();
+  console.log(replayDate);
   return (
     <Input
       size="md"
       type="datetime-local"
       w="auto"
-      value={replayDate.toISOString()}
+      value={replayDate.toISOString().slice(0, 16)}
       onChange={(e) => changeReplayDate(new Date(e.target.value))}
     />
   );

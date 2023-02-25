@@ -9,5 +9,5 @@ export default function changeReplayDate({
   stateSetter,
   newReplayDate,
 }: ChangeReplayDateDependencies) {
-  stateSetter({ replayDate: newReplayDate });
+  stateSetter({ replayTimestamp: newReplayDate.getTime() });
 }

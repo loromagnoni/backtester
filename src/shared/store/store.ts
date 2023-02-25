@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { appSlice } from './appSlice';
 import { globalSlice } from './globalSlice';
+import { tradeSlice } from './tradeSlice';
 
 export const store = configureStore({
   reducer: {
     app: appSlice.reducer,
-    // trade: tradeSlice.reducer,
+    trade: tradeSlice.reducer,
     //fixedRiskPositionMode: fixedRiskPositionSlice.reducer,
     //   dataLoader: dataLoaderSlice.reducer,
     global: globalSlice.reducer,

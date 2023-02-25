@@ -12,7 +12,7 @@ export const globalSlice = createSlice({
   initialState: {
     assetSelected: undefined as Asset | undefined,
     timeframeSelected: undefined as Timeframe | undefined,
-    replayDate: undefined as Date | undefined,
+    replayTimestamp: undefined as number | undefined,
     isReplaying: undefined as boolean | undefined,
     replayVelocity: undefined as Velocity | undefined,
   },
@@ -25,7 +25,9 @@ export const globalSlice = createSlice({
         }>
       >
     ) => {
-      state = { ...state, ...action.payload };
+      console.log('FROM', JSON.stringify(state));
+      Object.assign(state, action.payload);
+      console.log('TO', JSON.stringify(state));
     },
   },
 });

@@ -1,4 +1,5 @@
 import State from 'domain/interfaces/state';
+import getDefaultReplayDate from './getDefaulReplayDate';
 
 interface GetCurrentReplayDateDependencies {
   state: State;
@@ -7,5 +8,6 @@ interface GetCurrentReplayDateDependencies {
 export default function getReplayDate({
   state,
 }: GetCurrentReplayDateDependencies): Date {
-  return state.replayDate ?? new Date(2000, 1, 1);
+  if (state.replayTimestamp) return new Date(state.replayTimestamp);
+  return getDefaultReplayDate();
 }
