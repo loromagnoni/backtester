@@ -6,7 +6,6 @@ import {
 } from 'core/lightweight-chart/lightweight-charts';
 import Asset from 'domain/interfaces/asset';
 import Timeframe from 'domain/interfaces/timeframe';
-import { getCandleAfterMinute } from 'shared/services/candleCalculatorService';
 
 export type SerieProvider = (chart: IChartApi) => void;
 
