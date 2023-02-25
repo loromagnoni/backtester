@@ -4,17 +4,15 @@ import {
   CandlestickData,
   IChartApi,
 } from 'core/lightweight-chart/lightweight-charts';
-import { Timeframe } from 'shared/data/timeframes';
+import Asset from 'domain/interfaces/asset';
+import Timeframe from 'domain/interfaces/timeframe';
 import { getCandleAfterMinute } from 'shared/services/candleCalculatorService';
-import Asset from '../../domain/models/asset';
 
 export type SerieProvider = (chart: IChartApi) => void;
 
 export const appSlice = createSlice({
   name: 'app',
   initialState: {
-    timeframe: undefined as Timeframe | undefined,
-    asset: undefined as Asset | undefined,
     assetSerie: [] as CandlestickData[],
     replayVelocity: 1,
     isReplaying: false,
@@ -51,7 +49,6 @@ export const appSlice = createSlice({
       state.currentReplayTimestamp = action.payload;
     },
     selectTimeframe: (state, action: PayloadAction<Timeframe | undefined>) => {
-      state.timeframe = action.payload;
       state.startingReplayTimestamp = state.currentReplayTimestamp;
     },
     setCurrentReplayDate: (state, action: PayloadAction<number>) => {
@@ -60,19 +57,19 @@ export const appSlice = createSlice({
     toggleReplay: (state) => {
       state.isReplaying = !state.isReplaying;
     },
-    nextMinuteReplay: (state) => {
-      const tick = state.assetSerie[state.index];
-      state.currentReplayTimestamp = new Date(
-        (tick.time as number) * 1000
-      ).getTime();
-      const candle = getCandleAfterMinute(
-        tick as CandlestickData,
-        state.index % state.timeframe!.minutes,
-        state.lastCandle
-      );
-      state.lastCandle = candle;
-      state.index += 1;
-    },
+    // nextMinuteReplay: (state) => {
+    //   const tick = state.assetSerie[state.index];
+    //   state.currentReplayTimestamp = new Date(
+    //     (tick.time as number) * 1000
+    //   ).getTime();
+    //   const candle = getCandleAfterMinute(
+    //     tick as CandlestickData,
+    //     state.index % state.timeframe!.minutes,
+    //     state.lastCandle
+    //   );
+    //   state.lastCandle = candle;
+    //   state.index += 1;
+    // },
     setState: (
       state,
       action: PayloadAction<
@@ -101,7 +98,6 @@ export const {
   setReplayVelocity,
   setIsReplaying,
   setCurrentReplayDate,
-  nextMinuteReplay,
   resetReplay,
   toggleReplay,
   selectReplayDate,

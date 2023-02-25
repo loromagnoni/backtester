@@ -1,11 +1,11 @@
-import Asset from 'domain/models/asset';
+import AssetRepository from 'domain/interfaces/assetRepository';
 
 interface GetAvailableAssetsDependencies {
-  getFromDataSource: () => Asset[];
+  assetRepository: AssetRepository;
 }
 
 export default function getAvailableAssets({
-  getFromDataSource,
+  assetRepository,
 }: GetAvailableAssetsDependencies) {
-  return getFromDataSource();
+  return assetRepository.getAvailableAssets();
 }

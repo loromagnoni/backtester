@@ -1,15 +1,14 @@
-import Asset from '../models/asset';
-import AssetState from '../models/assetState';
-import { Setter } from '../models/setter';
+import Asset from '../interfaces/asset';
+import { StateSetter } from '../interfaces/setter';
 
 interface ChangeAssetDependencies {
-  setAssetState: Setter<AssetState>;
-  assetSelected: Asset;
+  stateSetter: StateSetter;
+  newAssetSelected: Asset;
 }
 
 export default function changeAsset({
-  setAssetState,
-  assetSelected,
+  stateSetter,
+  newAssetSelected,
 }: ChangeAssetDependencies) {
-  setAssetState({ assetSelected });
+  stateSetter({ assetSelected: newAssetSelected });
 }

@@ -1,10 +1,7 @@
 import { Flex, HStack, VStack } from '@chakra-ui/react';
 import AssetSelector from 'app/features/assetSelector/AssetSelector';
-import { CandleStickChart } from 'features/chart';
-import { LoadingAssetMessage } from 'features/dataLoading/LoadingAssetMessage';
-import { ReplayToolbar } from 'features/replay';
-import { TimeframeSelector } from 'features/timeframe';
-import { TradeToolbar } from 'features/trade';
+import ReplayToolbar from 'app/features/replay/replayToolbar/ReplayToolbar';
+import TimeframeSelector from 'app/features/timeframeSelector/TimeframeSelector';
 
 export default function HomeLayout() {
   return (
@@ -19,14 +16,13 @@ export default function HomeLayout() {
         <Flex flex={10}>
           <ReplayToolbar />
         </Flex>
-        <LoadingAssetMessage />
       </HStack>
-      <Flex flex={1} w="full">
+      {/* <Flex flex={1} w="full">
         <CandleStickChart />
-      </Flex>
-      <HStack justifyContent="start" w="full" p={2}>
+      </Flex> */}
+      {/* <HStack justifyContent="start" w="full" p={2}>
         <TradeToolbar />
-      </HStack>
+      </HStack> */}
     </VStack>
   );
 }

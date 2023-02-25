@@ -35,6 +35,7 @@ export const dataLoaderSlice = createSlice({
       };
       state.needsReload = false;
     },
+    //unused with new AssetSelector
     setTicker: (state, action: PayloadAction<string>) => {
       state.lastChunk = {
         month: state.lastChunk?.month,
