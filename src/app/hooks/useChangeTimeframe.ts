@@ -4,11 +4,19 @@ import { useCallback } from 'react';
 import { useGlobalState } from 'shared/store';
 
 export default function useChangeTimeframe() {
-  const [, stateSetter] = useGlobalState();
-  const { timeframeRepository } = useDependencies();
+  const [state, stateSetter] = useGlobalState();
+  const { timeframeRepository, chartManager, assetRepository } =
+    useDependencies();
   return useCallback(
     (newTimeframeLabel: string) =>
-      changeTimeframe({ stateSetter, newTimeframeLabel, timeframeRepository }),
-    [stateSetter, timeframeRepository]
+      changeTimeframe({
+        stateSetter,
+        newTimeframeLabel,
+        timeframeRepository,
+        state,
+        chartManager,
+        assetRepository,
+      }),
+    [assetRepository, chartManager, state, stateSetter, timeframeRepository]
   );
 }

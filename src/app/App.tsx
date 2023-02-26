@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ModalProvider } from 'core/modal/ModalProvider';
 import './global.css';
 import { StoreProvider } from '../shared/store/StoreProvider';
-import HomeLayout from './HomeLayout';
+import HomeLayout from './features/home/HomeLayout';
 
 const queryClient = new QueryClient({
   defaultOptions: {

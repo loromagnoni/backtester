@@ -1,4 +1,3 @@
-export const fan =
-    <T>(...fns: Function[]) =>
-    (arg: T) =>
-        fns.forEach((fn) => fn(arg));
+export default function fan<T>(...fns: Function[]) {
+  return (arg: T) => fns.forEach((fn) => fn(arg));
+}
