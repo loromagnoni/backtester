@@ -5,7 +5,6 @@ import useReplayDate from 'app/hooks/useReplayDate';
 export default function ReplayTimeSelector() {
   const replayDate = useReplayDate();
   const changeReplayDate = useChangeReplayDate();
-  console.log(replayDate);
   return (
     <Input
       size="md"

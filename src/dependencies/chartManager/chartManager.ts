@@ -94,6 +94,7 @@ export default function chartManager(): ChartManager {
         time: candle.time as UTCTimestamp,
       }));
       serie?.setData(mapped);
+      chart?.timeScale().fitContent();
     },
   };
 }

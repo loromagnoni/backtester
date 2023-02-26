@@ -22,7 +22,7 @@ const dateConverter = (d: string): number => {
   );
 };
 
-export const chartAdapter = (data: any): CandleStick[] => {
+function chartAdapter(data: any): CandleStick[] {
   return data.map((item: any) => ({
     time: dateConverter(item['Gmt time']),
     open: item.Open,
@@ -30,7 +30,11 @@ export const chartAdapter = (data: any): CandleStick[] => {
     low: item.Low,
     close: item.Close,
   }));
-};
+}
+
+function beforeDate(date: Date, candle: CandleStick): boolean {
+  return candle.time < date.getTime() / 1000;
+}
 
 export default function assetRepository(): AssetRepository {
   return {
@@ -42,11 +46,13 @@ export default function assetRepository(): AssetRepository {
     async getAssetSerie(asset, date) {
       const url = `/data/${
         asset.label
-      }_1m_${date.getFullYear()}${getMonthString(date.getMonth())}.json`;
+      }_1m_${date.getFullYear()}${getMonthString(date.getMonth() + 1)}.json`;
       const data = await fetch(url);
       const json = await data.json();
       const chartAdapted = chartAdapter(json);
-      const filtered = chartAdapted.filter(onlyOpenMarketHours);
+      const filtered = chartAdapted.filter(
+        (candle) => onlyOpenMarketHours(candle) && beforeDate(date, candle)
+      );
       return filtered;
     },
   };
