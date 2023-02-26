@@ -3,6 +3,13 @@ import { useMemo } from 'react';
 import { useGlobalState } from 'shared/store';
 
 export default function useReplayDate() {
-  const [state] = useGlobalState();
-  return useMemo(() => getCurrentReplayDate({ state }), [state]);
+  const [state, stateSetter] = useGlobalState();
+  return useMemo(
+    () =>
+      getCurrentReplayDate({
+        state: { replayTimestamp: state.replayTimestamp },
+        stateSetter,
+      }),
+    [state.replayTimestamp, stateSetter]
+  );
 }

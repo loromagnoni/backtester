@@ -1,22 +1,18 @@
-import useDependencies from 'app/dependencies/useDependencies';
 import changeReplayDate from 'domain/useCase/changeReplayDate';
 import { useCallback } from 'react';
 import { useGlobalState } from 'shared/store';
+import useUpdateChart from './useUpdateChart';
 
 export default function useChangeReplayDate() {
-  const [state, stateSetter] = useGlobalState();
-  const { chartManager, assetRepository, timeframeRepository } =
-    useDependencies();
+  const [, stateSetter] = useGlobalState();
+  const updateChart = useUpdateChart();
   return useCallback(
     (newReplayDate: Date) =>
       changeReplayDate({
         newReplayDate,
         stateSetter,
-        state,
-        assetRepository,
-        timeframeRepository,
-        chartManager,
+        updateChart,
       }),
-    [assetRepository, chartManager, state, stateSetter, timeframeRepository]
+    [stateSetter, updateChart]
   );
 }

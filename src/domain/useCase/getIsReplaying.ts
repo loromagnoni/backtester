@@ -1,7 +1,7 @@
-import State from 'domain/interfaces/state';
+import { StateSlice } from 'domain/interfaces/state';
 
 interface GetIsReplayingDependencies {
-  state: State;
+  state: StateSlice<'isReplaying'>;
 }
 
 export default function GetIsReplying({

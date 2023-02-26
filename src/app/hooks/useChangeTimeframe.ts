@@ -2,21 +2,20 @@ import useDependencies from 'app/dependencies/useDependencies';
 import changeTimeframe from 'domain/useCase/changeTimeframe';
 import { useCallback } from 'react';
 import { useGlobalState } from 'shared/store';
+import useUpdateChart from './useUpdateChart';
 
 export default function useChangeTimeframe() {
-  const [state, stateSetter] = useGlobalState();
-  const { timeframeRepository, chartManager, assetRepository } =
-    useDependencies();
+  const [, stateSetter] = useGlobalState();
+  const { timeframeRepository } = useDependencies();
+  const updateChart = useUpdateChart();
   return useCallback(
     (newTimeframeLabel: string) =>
       changeTimeframe({
         stateSetter,
         newTimeframeLabel,
         timeframeRepository,
-        state,
-        chartManager,
-        assetRepository,
+        updateChart,
       }),
-    [assetRepository, chartManager, state, stateSetter, timeframeRepository]
+    [stateSetter, timeframeRepository, updateChart]
   );
 }

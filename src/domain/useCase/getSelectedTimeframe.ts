@@ -1,10 +1,10 @@
 import { StateSetter } from 'domain/interfaces/setter';
-import State from 'domain/interfaces/state';
+import { StateSlice } from 'domain/interfaces/state';
 import Timeframe from 'domain/interfaces/timeframe';
 import TimeframeRepository from 'domain/interfaces/timeframeRepository';
 
 interface GetSelectedTimeframeDependencies {
-  state: State;
+  state: StateSlice<'timeframeSelected'>;
   stateSetter: StateSetter;
   timeframeRepository: TimeframeRepository;
 }

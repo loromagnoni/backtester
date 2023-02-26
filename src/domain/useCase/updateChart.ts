@@ -1,21 +1,8 @@
+import Asset from 'domain/interfaces/asset';
 import AssetRepository from 'domain/interfaces/assetRepository';
 import CandleStick from 'domain/interfaces/candlestick';
 import ChartManager from 'domain/interfaces/chartManager';
-import { StateSetter } from 'domain/interfaces/setter';
-import State from 'domain/interfaces/state';
 import Timeframe from 'domain/interfaces/timeframe';
-import TimeframeRepository from 'domain/interfaces/timeframeRepository';
-import getReplayDate from './getReplayDate';
-import getSelectedAsset from './getSelectedAsset';
-import getSelectedTimeframe from './getSelectedTimeframe';
-
-interface UpdateChartDependencies {
-  chartManager: ChartManager;
-  assetRepository: AssetRepository;
-  timeframeRepository: TimeframeRepository;
-  state: State;
-  stateSetter: StateSetter;
-}
 
 function applyTimeframe(
   data: CandleStick[],
@@ -43,26 +30,22 @@ function applyTimeframe(
   }
   return result;
 }
+interface UpdateChartDependencies {
+  chartManager: ChartManager;
+  assetRepository: AssetRepository;
+  replayDate: Date;
+  selectedAsset: Asset;
+  selectedTimeframe: Timeframe;
+}
 
 export default async function updateChart({
   chartManager,
   assetRepository,
-  timeframeRepository,
-  state,
-  stateSetter,
+  replayDate,
+  selectedAsset,
+  selectedTimeframe,
 }: UpdateChartDependencies) {
-  const replayDate = getReplayDate({ state });
-  const selectedAsset = getSelectedAsset({
-    state,
-    stateSetter,
-    assetRepository,
-  });
   const serie = await assetRepository.getAssetSerie(selectedAsset, replayDate);
-  const timeframe = getSelectedTimeframe({
-    state,
-    stateSetter,
-    timeframeRepository,
-  });
-  const timeframeAdapted = applyTimeframe(serie, timeframe);
+  const timeframeAdapted = applyTimeframe(serie, selectedTimeframe);
   chartManager.updateChart(timeframeAdapted);
 }

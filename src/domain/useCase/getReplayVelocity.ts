@@ -1,8 +1,8 @@
-import State from 'domain/interfaces/state';
+import { StateSlice } from 'domain/interfaces/state';
 import Velocity from 'domain/interfaces/velocity';
 
 interface GetReplayVelocityDependencies {
-  state: State;
+  state: StateSlice<'replayVelocity'>;
 }
 
 export default function getReplayVelocity({

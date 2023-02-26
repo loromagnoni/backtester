@@ -1,16 +1,22 @@
+import ReplayManager from 'domain/interfaces/replayManager';
 import { StateSetter } from 'domain/interfaces/setter';
-import State from 'domain/interfaces/state';
-import getIsReplaying from './getIsReplaying';
 
 interface ToggleReplayActivationDependencies {
-  state: State;
+  isReplaying: boolean;
   stateSetter: StateSetter;
+  replayManager: ReplayManager;
 }
 
 export default function toggleReplayActivation({
-  state,
+  isReplaying,
   stateSetter,
+  replayManager,
 }: ToggleReplayActivationDependencies) {
-  const isReplaying = getIsReplaying({ state });
-  stateSetter({ isReplaying: !isReplaying });
+  const newReplayState = !isReplaying;
+  stateSetter({ isReplaying: newReplayState });
+  if (newReplayState) {
+    replayManager.startTimer();
+  } else {
+    replayManager.endTimer();
+  }
 }

@@ -1,10 +1,10 @@
 import Asset from 'domain/interfaces/asset';
 import AssetRepository from 'domain/interfaces/assetRepository';
 import { StateSetter } from 'domain/interfaces/setter';
-import State from 'domain/interfaces/state';
+import { StateSlice } from 'domain/interfaces/state';
 
 interface GetSelectedAssetDependencies {
-  state: State;
+  state: StateSlice<'assetSelected'>;
   stateSetter: StateSetter;
   assetRepository: AssetRepository;
 }

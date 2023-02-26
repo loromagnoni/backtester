@@ -9,10 +9,10 @@ export default function useSelectedAsset() {
   return useMemo(
     () =>
       getSelectedAsset({
-        state,
+        state: { assetSelected: state.assetSelected },
         stateSetter,
         assetRepository,
       }),
-    [assetRepository, state, stateSetter]
+    [assetRepository, state.assetSelected, stateSetter]
   );
 }

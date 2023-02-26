@@ -1,23 +1,19 @@
-import useDependencies from 'app/dependencies/useDependencies';
 import Asset from 'domain/interfaces/asset';
 import changeAsset from 'domain/useCase/changeAsset';
 import { useCallback } from 'react';
 import { useGlobalState } from 'shared/store';
+import useUpdateChart from './useUpdateChart';
 
 export default function useChangeAsset() {
-  const [state, stateSetter] = useGlobalState();
-  const { chartManager, assetRepository, timeframeRepository } =
-    useDependencies();
+  const [, stateSetter] = useGlobalState();
+  const updateChart = useUpdateChart();
   return useCallback(
     (newAssetSelected: Asset) =>
       changeAsset({
         stateSetter,
-        state,
         newAssetSelected,
-        chartManager,
-        assetRepository,
-        timeframeRepository,
+        updateChart,
       }),
-    [assetRepository, chartManager, state, stateSetter, timeframeRepository]
+    [stateSetter, updateChart]
   );
 }

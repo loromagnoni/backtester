@@ -7,7 +7,12 @@ export default function useSelectedTimeframe() {
   const [state, stateSetter] = useGlobalState();
   const { timeframeRepository } = useDependencies();
   return useMemo(
-    () => getSelectedTimeframe({ state, stateSetter, timeframeRepository }),
-    [state, stateSetter, timeframeRepository]
+    () =>
+      getSelectedTimeframe({
+        state: { timeframeSelected: state.timeframeSelected },
+        stateSetter,
+        timeframeRepository,
+      }),
+    [state.timeframeSelected, stateSetter, timeframeRepository]
   );
 }

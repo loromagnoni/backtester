@@ -9,3 +9,8 @@ export default interface State {
   isReplaying: boolean | undefined;
   replayVelocity: Velocity | undefined;
 }
+
+type Exact<T, K extends keyof T> = Pick<T, K> &
+  Partial<Record<Exclude<keyof T, K>, never>>;
+
+export type StateSlice<K extends keyof State> = Exact<State, K>;
