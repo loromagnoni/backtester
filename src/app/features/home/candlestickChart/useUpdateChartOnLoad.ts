@@ -1,9 +1,9 @@
-import useUpdateChart from 'app/hooks/useUpdateChart';
+import useResetChart from 'app/hooks/useResetChart';
 import { useEffect } from 'react';
 
 export default function useUpdateChartOnLoad() {
-  const updateChart = useUpdateChart();
+  const resetChart = useResetChart();
   useEffect(() => {
-    updateChart();
-  }, [updateChart]);
+    resetChart();
+  }, [resetChart]);
 }

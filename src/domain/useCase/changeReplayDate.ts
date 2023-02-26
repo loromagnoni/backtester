@@ -3,14 +3,18 @@ import { StateSetter } from '../interfaces/setter';
 interface ChangeReplayDateDependencies {
   stateSetter: StateSetter;
   newReplayDate: Date;
-  updateChart: CallableFunction;
+  resetChart: CallableFunction;
 }
 
 export default function changeReplayDate({
   stateSetter,
   newReplayDate,
-  updateChart,
+  resetChart,
 }: ChangeReplayDateDependencies) {
-  stateSetter({ replayTimestamp: newReplayDate.getTime() });
-  updateChart();
+  const newTimestamp = newReplayDate.getTime();
+  stateSetter({
+    startingReplayTimestamp: newTimestamp,
+    replayTimestamp: newTimestamp,
+  });
+  resetChart();
 }

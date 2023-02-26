@@ -2,5 +2,6 @@ import CandleStick from './candlestick';
 
 export default interface ChartManager {
   initChart: (ref: any) => void;
-  updateChart: (serie: CandleStick[]) => void;
+  resetChart: (serie: CandleStick[]) => void;
+  appendToChart: (candle: CandleStick) => void;
 }

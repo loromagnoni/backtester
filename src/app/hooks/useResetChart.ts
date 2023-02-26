@@ -1,28 +1,28 @@
 import useDependencies from 'app/dependencies/useDependencies';
-import updateChart from 'domain/useCase/updateChart';
+import resetChart from 'domain/useCase/resetChart';
 import { useCallback } from 'react';
-import useReplayDate from './useReplayDate';
 import useSelectedAsset from './useSelectedAsset';
 import useSelectedTimeframe from './useSelectedTimeframe';
+import useStartingReplayDate from './useStartingReplayDate';
 
-export default function useUpdateChart() {
+export default function useResetChart() {
   const { assetRepository, chartManager } = useDependencies();
-  const replayDate = useReplayDate();
+  const startingReplayDate = useStartingReplayDate();
   const selectedAsset = useSelectedAsset();
   const selectedTimeframe = useSelectedTimeframe();
   return useCallback(
     () =>
-      updateChart({
+      resetChart({
         chartManager,
         assetRepository,
-        replayDate,
+        startingReplayDate,
         selectedTimeframe,
         selectedAsset,
       }),
     [
       assetRepository,
       chartManager,
-      replayDate,
+      startingReplayDate,
       selectedAsset,
       selectedTimeframe,
     ]

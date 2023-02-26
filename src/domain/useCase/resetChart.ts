@@ -33,19 +33,22 @@ function applyTimeframe(
 interface UpdateChartDependencies {
   chartManager: ChartManager;
   assetRepository: AssetRepository;
-  replayDate: Date;
+  startingReplayDate: Date;
   selectedAsset: Asset;
   selectedTimeframe: Timeframe;
 }
 
-export default async function updateChart({
+export default async function resetChart({
   chartManager,
   assetRepository,
-  replayDate,
+  startingReplayDate,
   selectedAsset,
   selectedTimeframe,
 }: UpdateChartDependencies) {
-  const serie = await assetRepository.getAssetSerie(selectedAsset, replayDate);
+  const serie = await assetRepository.getAssetSerie(
+    selectedAsset,
+    startingReplayDate
+  );
   const timeframeAdapted = applyTimeframe(serie, selectedTimeframe);
-  chartManager.updateChart(timeframeAdapted);
+  chartManager.resetChart(timeframeAdapted);
 }

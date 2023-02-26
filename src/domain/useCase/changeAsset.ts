@@ -4,14 +4,14 @@ import { StateSetter } from '../interfaces/setter';
 interface ChangeAssetDependencies {
   stateSetter: StateSetter;
   newAssetSelected: Asset;
-  updateChart: CallableFunction;
+  resetChart: CallableFunction;
 }
 
 export default function changeAsset({
   stateSetter,
   newAssetSelected,
-  updateChart,
+  resetChart,
 }: ChangeAssetDependencies) {
   stateSetter({ assetSelected: newAssetSelected });
-  updateChart();
+  resetChart();
 }

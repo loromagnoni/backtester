@@ -13,6 +13,7 @@ export const globalSlice = createSlice({
     assetSelected: undefined as Asset | undefined,
     timeframeSelected: undefined as Timeframe | undefined,
     replayTimestamp: undefined as number | undefined,
+    startingReplayTimestamp: undefined as number | undefined,
     isReplaying: undefined as boolean | undefined,
     replayVelocity: undefined as Velocity | undefined,
   },

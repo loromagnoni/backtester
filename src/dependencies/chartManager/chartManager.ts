@@ -51,6 +51,8 @@ export const colors = {
 export default function chartManager(): ChartManager {
   return {
     initChart(ref: React.RefObject<HTMLDivElement>) {
+      console.log('init');
+
       const handleResize = () => {
         chart?.applyOptions({
           width: ref.current!.clientWidth,
@@ -88,13 +90,21 @@ export default function chartManager(): ChartManager {
         chart?.remove();
       };
     },
-    updateChart(data: CandleStick[]) {
+    resetChart(data: CandleStick[]) {
+      console.log('resetting');
       const mapped: CandlestickData[] = data.map((candle) => ({
         ...candle,
         time: candle.time as UTCTimestamp,
       }));
       serie?.setData(mapped);
       chart?.timeScale().fitContent();
+    },
+    appendToChart(candle: CandleStick) {
+      console.log('appending');
+      serie?.update({
+        ...candle,
+        time: candle.time as UTCTimestamp,
+      });
     },
   };
 }

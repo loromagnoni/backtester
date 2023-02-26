@@ -1,6 +1,8 @@
+import Asset from 'domain/interfaces/asset';
 import AssetRepository from 'domain/interfaces/assetRepository';
 import CandleStick from 'domain/interfaces/candlestick';
 import assets from './assets';
+import serieCache from './serieCache';
 
 export const onlyOpenMarketHours = (item: CandleStick): boolean => {
   const date = new Date((item.time as number) * 1000);
@@ -36,7 +38,26 @@ function beforeDate(date: Date, candle: CandleStick): boolean {
   return candle.time < date.getTime() / 1000;
 }
 
+async function getRawSerie(
+  asset: Asset,
+  date: Date,
+  cache: ReturnType<typeof serieCache>
+): Promise<CandleStick[]> {
+  const url = `/data/${asset.label}_1m_${date.getFullYear()}${getMonthString(
+    date.getMonth() + 1
+  )}.json`;
+  let serie = cache.getSerie(url);
+  if (!serie) {
+    const data = await fetch(url);
+    const json = await data.json();
+    serie = chartAdapter(json);
+    cache.saveSerie(serie, url);
+  }
+  return serie;
+}
+
 export default function assetRepository(): AssetRepository {
+  const cache = serieCache();
   return {
     getAvailableAssets() {
       return Array.from(
@@ -44,16 +65,17 @@ export default function assetRepository(): AssetRepository {
       );
     },
     async getAssetSerie(asset, date) {
-      const url = `/data/${
-        asset.label
-      }_1m_${date.getFullYear()}${getMonthString(date.getMonth() + 1)}.json`;
-      const data = await fetch(url);
-      const json = await data.json();
-      const chartAdapted = chartAdapter(json);
-      const filtered = chartAdapted.filter(
+      const serie = await getRawSerie(asset, date, cache);
+      const filtered = serie.filter(
         (candle) => onlyOpenMarketHours(candle) && beforeDate(date, candle)
       );
       return filtered;
+    },
+    async getCandleByMinute(asset, date) {
+      const serie = await getRawSerie(asset, date, cache);
+      const candle = serie.find((c) => c.time === date.getTime() / 1000);
+      if (!candle) throw new Error('Candle not found!');
+      return candle;
     },
   };
 }

@@ -5,17 +5,17 @@ interface ChangeTimeframeDependencies {
   newTimeframeLabel: string;
   timeframeRepository: TimeframeRepository;
   stateSetter: StateSetter;
-  updateChart: CallableFunction;
+  resetChart: CallableFunction;
 }
 
 export default function changeTimeframe({
   newTimeframeLabel,
   timeframeRepository,
   stateSetter,
-  updateChart,
+  resetChart,
 }: ChangeTimeframeDependencies) {
   const newTimeframe =
     timeframeRepository.getTimeframeByLabel(newTimeframeLabel);
   stateSetter({ timeframeSelected: newTimeframe });
-  updateChart();
+  resetChart();
 }

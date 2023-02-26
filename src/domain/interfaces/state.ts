@@ -5,6 +5,7 @@ import Velocity from './velocity';
 export default interface State {
   assetSelected: Asset | undefined;
   timeframeSelected: Timeframe | undefined;
+  startingReplayTimestamp: number | undefined;
   replayTimestamp: number | undefined;
   isReplaying: boolean | undefined;
   replayVelocity: Velocity | undefined;

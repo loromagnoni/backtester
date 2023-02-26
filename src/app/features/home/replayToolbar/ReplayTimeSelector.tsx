@@ -1,9 +1,9 @@
 import { Input } from '@chakra-ui/react';
 import useChangeReplayDate from 'app/hooks/useChangeReplayDate';
-import useReplayDate from 'app/hooks/useReplayDate';
+import useStartingReplayDate from 'app/hooks/useStartingReplayDate';
 
 export default function ReplayTimeSelector() {
-  const replayDate = useReplayDate();
+  const replayDate = useStartingReplayDate();
   const changeReplayDate = useChangeReplayDate();
   return (
     <Input
