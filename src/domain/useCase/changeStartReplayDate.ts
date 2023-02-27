@@ -6,7 +6,7 @@ interface ChangeReplayDateDependencies {
   resetChart: CallableFunction;
 }
 
-export default function changeReplayDate({
+export default function changeStartReplayDate({
   stateSetter,
   newReplayDate,
   resetChart,

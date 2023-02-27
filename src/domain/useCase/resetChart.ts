@@ -2,6 +2,7 @@ import Asset from 'domain/interfaces/asset';
 import AssetRepository from 'domain/interfaces/assetRepository';
 import CandleStick from 'domain/interfaces/candlestick';
 import ChartManager from 'domain/interfaces/chartManager';
+import { StateSetter } from 'domain/interfaces/setter';
 import Timeframe from 'domain/interfaces/timeframe';
 
 function applyTimeframe(
@@ -30,12 +31,13 @@ function applyTimeframe(
   }
   return result;
 }
-interface UpdateChartDependencies {
+interface ResetChartDependencies {
   chartManager: ChartManager;
   assetRepository: AssetRepository;
   startingReplayDate: Date;
   selectedAsset: Asset;
   selectedTimeframe: Timeframe;
+  stateSetter: StateSetter;
 }
 
 export default async function resetChart({
@@ -44,11 +46,17 @@ export default async function resetChart({
   startingReplayDate,
   selectedAsset,
   selectedTimeframe,
-}: UpdateChartDependencies) {
+  stateSetter,
+}: ResetChartDependencies) {
   const serie = await assetRepository.getAssetSerie(
     selectedAsset,
     startingReplayDate
   );
   const timeframeAdapted = applyTimeframe(serie, selectedTimeframe);
+  // TODO: calculate cumulative ticks
+  stateSetter({
+    cumulativeTicks: 0,
+    lastCandle: timeframeAdapted[timeframeAdapted.length - 1],
+  });
   chartManager.resetChart(timeframeAdapted);
 }

@@ -14,7 +14,7 @@ export default function replayManager(): ReplayManager {
         } else {
           throw new Error('Replay callback not set!');
         }
-      }, 3000);
+      }, 300);
     },
     endTimer() {
       clearInterval(interval);

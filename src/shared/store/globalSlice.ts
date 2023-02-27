@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IChartApi } from 'core/lightweight-chart/lightweight-charts';
+import CandleStick from 'domain/interfaces/candlestick';
 import Timeframe from 'domain/interfaces/timeframe';
 import Velocity from 'domain/interfaces/velocity';
 import Asset from '../../domain/interfaces/asset';
@@ -16,6 +17,8 @@ export const globalSlice = createSlice({
     startingReplayTimestamp: undefined as number | undefined,
     isReplaying: undefined as boolean | undefined,
     replayVelocity: undefined as Velocity | undefined,
+    lastCandle: undefined as CandleStick | undefined,
+    cumulativeTicks: undefined as number | undefined,
   },
   reducers: {
     setState: (
@@ -26,9 +29,7 @@ export const globalSlice = createSlice({
         }>
       >
     ) => {
-      console.log('FROM', JSON.stringify(state));
       Object.assign(state, action.payload);
-      console.log('TO', JSON.stringify(state));
     },
   },
 });

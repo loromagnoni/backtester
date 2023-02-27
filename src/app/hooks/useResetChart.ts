@@ -1,6 +1,7 @@
 import useDependencies from 'app/dependencies/useDependencies';
 import resetChart from 'domain/useCase/resetChart';
 import { useCallback } from 'react';
+import { useGlobalState } from 'shared/store';
 import useSelectedAsset from './useSelectedAsset';
 import useSelectedTimeframe from './useSelectedTimeframe';
 import useStartingReplayDate from './useStartingReplayDate';
@@ -10,6 +11,7 @@ export default function useResetChart() {
   const startingReplayDate = useStartingReplayDate();
   const selectedAsset = useSelectedAsset();
   const selectedTimeframe = useSelectedTimeframe();
+  const [, stateSetter] = useGlobalState();
   return useCallback(
     () =>
       resetChart({
@@ -18,13 +20,15 @@ export default function useResetChart() {
         startingReplayDate,
         selectedTimeframe,
         selectedAsset,
+        stateSetter,
       }),
     [
-      assetRepository,
       chartManager,
+      assetRepository,
       startingReplayDate,
-      selectedAsset,
       selectedTimeframe,
+      selectedAsset,
+      stateSetter,
     ]
   );
 }

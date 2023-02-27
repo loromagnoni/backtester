@@ -49,10 +49,9 @@ export const colors = {
 };
 
 export default function chartManager(): ChartManager {
+  let lastTimeAdded: number | undefined;
   return {
     initChart(ref: React.RefObject<HTMLDivElement>) {
-      console.log('init');
-
       const handleResize = () => {
         chart?.applyOptions({
           width: ref.current!.clientWidth,
@@ -91,19 +90,26 @@ export default function chartManager(): ChartManager {
       };
     },
     resetChart(data: CandleStick[]) {
-      console.log('resetting');
       const mapped: CandlestickData[] = data.map((candle) => ({
         ...candle,
         time: candle.time as UTCTimestamp,
       }));
       serie?.setData(mapped);
-      chart?.timeScale().fitContent();
+      lastTimeAdded = data[data.length - 1].time;
     },
-    appendToChart(candle: CandleStick) {
-      console.log('appending');
+    updateLastCandle(data) {
+      if (!lastTimeAdded)
+        throw new Error('Need to set serie before updating last candle!');
       serie?.update({
-        ...candle,
-        time: candle.time as UTCTimestamp,
+        ...data,
+        time: lastTimeAdded as UTCTimestamp,
+      });
+    },
+    appendToChart(tick: CandleStick) {
+      lastTimeAdded = tick.time;
+      serie?.update({
+        ...tick,
+        time: tick.time as UTCTimestamp,
       });
     },
   };

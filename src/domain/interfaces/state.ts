@@ -1,4 +1,5 @@
 import Asset from './asset';
+import CandleStick from './candlestick';
 import Timeframe from './timeframe';
 import Velocity from './velocity';
 
@@ -9,6 +10,8 @@ export default interface State {
   replayTimestamp: number | undefined;
   isReplaying: boolean | undefined;
   replayVelocity: Velocity | undefined;
+  lastCandle: CandleStick | undefined;
+  cumulativeTicks: number | undefined;
 }
 
 type Exact<T, K extends keyof T> = Pick<T, K> &
