@@ -1,12 +1,14 @@
+import useDependencies from 'app/dependencies/useDependencies';
 import getCumulativeTicks from 'domain/useCase/chart/getCumulativeTicks';
 import { useMemo } from 'react';
-import { useGlobalState } from 'shared/store/hooks';
 
 export default function useCumulativeTicks() {
-  const [state] = useGlobalState();
+  const { state } = useDependencies();
   return useMemo(
     () =>
-      getCumulativeTicks({ state: { cumulativeTicks: state.cumulativeTicks } }),
+      getCumulativeTicks({
+        state: { cumulativeTicks: state.cumulativeTicks },
+      }),
     [state.cumulativeTicks]
   );
 }

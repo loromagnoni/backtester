@@ -1,11 +1,14 @@
+import useDependencies from 'app/dependencies/useDependencies';
 import getReplayDate from 'domain/useCase/replay/date/getReplayDate';
 import { useMemo } from 'react';
-import { useGlobalState } from 'shared/store/hooks';
 
 export default function useReplayDate(): Date {
-  const [state] = useGlobalState();
+  const { state } = useDependencies();
   return useMemo(
-    () => getReplayDate({ state: { replayTimestamp: state.replayTimestamp } }),
+    () =>
+      getReplayDate({
+        state: { replayTimestamp: state.replayTimestamp },
+      }),
     [state.replayTimestamp]
   );
 }

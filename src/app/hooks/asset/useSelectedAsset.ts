@@ -1,11 +1,9 @@
 import useDependencies from 'app/dependencies/useDependencies';
 import getSelectedAsset from 'domain/useCase/asset/getSelectedAsset';
 import { useMemo } from 'react';
-import { useGlobalState } from 'shared/store/hooks';
 
 export default function useSelectedAsset() {
-  const [state, stateSetter] = useGlobalState();
-  const { assetRepository } = useDependencies();
+  const { assetRepository, state, stateSetter } = useDependencies();
   return useMemo(
     () =>
       getSelectedAsset({

@@ -1,9 +1,9 @@
+import useDependencies from 'app/dependencies/useDependencies';
 import getReplayVelocity from 'domain/useCase/replay/velocity/getReplayVelocity';
 import { useMemo } from 'react';
-import { useGlobalState } from 'shared/store/hooks';
 
 export default function useReplayVelocity() {
-  const [state] = useGlobalState();
+  const { state } = useDependencies();
   return useMemo(
     () =>
       getReplayVelocity({ state: { replayVelocity: state.replayVelocity } }),

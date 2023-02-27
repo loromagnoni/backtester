@@ -1,9 +1,8 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ModalProvider } from 'core/modal/ModalProvider';
 import './global.css';
-import { StoreProvider } from '../shared/store/StoreProvider';
 import HomeLayout from './features/home/HomeLayout';
+import DependencyProvider from './dependencies/DependencyProvider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,14 +20,12 @@ export enum Modal {
 
 export function App() {
   return (
-    <StoreProvider>
+    <DependencyProvider>
       <ChakraProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
-          <ModalProvider>
-            <HomeLayout />
-          </ModalProvider>
+          <HomeLayout />
         </QueryClientProvider>
       </ChakraProvider>
-    </StoreProvider>
+    </DependencyProvider>
   );
 }
