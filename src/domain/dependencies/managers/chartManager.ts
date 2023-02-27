@@ -5,4 +5,5 @@ export default interface ChartManager {
   resetChart: (serie: CandleStick[]) => void;
   appendToChart: (candle: CandleStick) => void;
   updateLastCandle: (candle: Omit<CandleStick, 'time'>) => void;
+  fillChart: () => void;
 }

@@ -73,16 +73,6 @@ export default function chartManager(): ChartManager {
         ...colors,
       });
       chart?.timeScale().fitContent();
-      // chart?.subscribeCustomPriceLineDragged(
-      //   (p) =>
-      //   dispatch(
-      //     changedOrderPrice({
-      //       tradeId: getTradeIdFromPriceLine(p),
-      //       newPrice: getPriceFromPriceLine(p),
-      //       orderType: getOrderTypeFromPriceLine(p),
-      //     })
-      //   )
-      // );
       serie = chart!.addCandlestickSeries(colors);
       return () => {
         window.removeEventListener('resize', handleResize);
@@ -111,6 +101,9 @@ export default function chartManager(): ChartManager {
         ...tick,
         time: tick.time as UTCTimestamp,
       });
+    },
+    fillChart() {
+      chart?.timeScale().fitContent();
     },
   };
 }
