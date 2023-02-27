@@ -1,4 +1,4 @@
-import Timeframe from 'domain/interfaces/timeframe';
+import Timeframe from 'domain/models/timeframe';
 
 export default [
   {

@@ -1,4 +1,4 @@
-import State from 'domain/interfaces/state';
+import State from 'domain/dependencies/state/state';
 import { useCallback } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { setState } from './globalSlice';

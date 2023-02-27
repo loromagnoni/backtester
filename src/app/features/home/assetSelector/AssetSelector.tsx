@@ -1,7 +1,7 @@
 import { Select } from '@chakra-ui/react';
-import useChangeAsset from 'app/hooks/useChangeAsset';
-import useGetAvailableAssets from 'app/hooks/useAvailableAssets';
-import useSelectedAsset from 'app/hooks/useSelectedAsset';
+import useChangeAsset from 'app/hooks/asset/useChangeAsset';
+import useGetAvailableAssets from 'app/hooks/asset/useAvailableAssets';
+import useSelectedAsset from 'app/hooks/asset/useSelectedAsset';
 
 function AssetSelector() {
   const changeAsset = useChangeAsset();

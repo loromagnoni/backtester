@@ -1,6 +1,6 @@
-import Asset from 'domain/interfaces/asset';
-import AssetRepository from 'domain/interfaces/assetRepository';
-import CandleStick from 'domain/interfaces/candlestick';
+import AssetRepository from 'domain/dependencies/repositories/assetRepository';
+import Asset from 'domain/models/asset';
+import CandleStick from 'domain/models/candlestick';
 import assets from './assets';
 import serieCache from './serieCache';
 

@@ -1,4 +1,4 @@
-import TimeframeRepository from 'domain/interfaces/timeframeRepository';
+import TimeframeRepository from 'domain/dependencies/repositories/timeframeRepository';
 import timeframes from './timeframes';
 
 export default function timeframeRepository(): TimeframeRepository {

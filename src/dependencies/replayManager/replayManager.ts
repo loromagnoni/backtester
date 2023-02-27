@@ -1,4 +1,4 @@
-import ReplayManager from 'domain/interfaces/replayManager';
+import ReplayManager from 'domain/dependencies/managers/replayManager';
 
 export default function replayManager(): ReplayManager {
   let interval: NodeJS.Timeout | null;

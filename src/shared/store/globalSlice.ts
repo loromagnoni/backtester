@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IChartApi } from 'core/lightweight-chart/lightweight-charts';
-import CandleStick from 'domain/interfaces/candlestick';
-import Timeframe from 'domain/interfaces/timeframe';
-import Velocity from 'domain/interfaces/velocity';
-import Asset from '../../domain/interfaces/asset';
+import Asset from 'domain/models/asset';
+import CandleStick from 'domain/models/candlestick';
+import Timeframe from 'domain/models/timeframe';
+import Velocity from 'domain/models/velocity';
 
 export type SerieProvider = (chart: IChartApi) => void;
 

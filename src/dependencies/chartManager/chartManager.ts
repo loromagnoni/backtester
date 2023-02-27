@@ -6,8 +6,8 @@ import {
   IChartApi,
   ISeriesApi,
 } from 'core/lightweight-chart/lightweight-charts';
-import CandleStick from 'domain/interfaces/candlestick';
-import ChartManager from 'domain/interfaces/chartManager';
+import CandleStick from 'domain/models/candlestick';
+import ChartManager from 'domain/dependencies/managers/chartManager';
 import { UTCTimestamp } from 'lightweight-charts';
 
 let serie: ISeriesApi<'Candlestick'> | undefined;

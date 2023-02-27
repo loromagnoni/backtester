@@ -1,7 +1,7 @@
 import { Select } from '@chakra-ui/react';
-import useAvailableTimeframes from 'app/hooks/useAvailableTimeframes';
-import useChangeTimeframe from 'app/hooks/useChangeTimeframe';
-import useSelectedTimeframe from 'app/hooks/useSelectedTimeframe';
+import useAvailableTimeframes from 'app/hooks/timeframe/useAvailableTimeframes';
+import useChangeTimeframe from 'app/hooks/timeframe/useChangeTimeframe';
+import useSelectedTimeframe from 'app/hooks/timeframe/useSelectedTimeframe';
 
 export default function TimeframeSelector() {
   const timeframes = useAvailableTimeframes();

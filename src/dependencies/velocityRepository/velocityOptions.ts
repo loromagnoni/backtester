@@ -1,4 +1,4 @@
-import VelocityOption from 'domain/interfaces/velocity';
+import VelocityOption from 'domain/models/velocity';
 
 export default [
   {

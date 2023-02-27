@@ -1,4 +1,4 @@
-import VelocityRepository from 'domain/interfaces/velocityRepository';
+import VelocityRepository from 'domain/dependencies/repositories/velocityRepository';
 import velocityOptions from './velocityOptions';
 
 export default function velocityRepository(): VelocityRepository {
