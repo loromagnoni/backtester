@@ -2,21 +2,18 @@ import VelocityOption from 'domain/interfaces/velocity';
 
 export default [
   {
-    updatesPerSecond: 0,
+    updatesPerSecond: 1, // 1 minute per second
   },
   {
-    updatesPerSecond: 1,
+    updatesPerSecond: 5, // 5 minutes per second
   },
   {
-    updatesPerSecond: 5,
+    updatesPerSecond: 60, // 1 hour per second
   },
   {
-    updatesPerSecond: 10,
+    updatesPerSecond: 240, // 4 hours per second
   },
   {
-    updatesPerSecond: 50,
-  },
-  {
-    updatesPerSecond: 100,
+    updatesPerSecond: 480, // 8 hours per second
   },
 ] as VelocityOption[];

@@ -20,7 +20,7 @@ export default function VelocitySlider() {
   return (
     <Slider
       min={0}
-      max={5}
+      max={options.length - 1}
       onChange={(option) => changeVelocity(getVelocityFromOption(option))}
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
@@ -38,7 +38,7 @@ export default function VelocitySlider() {
         color="white"
         placement="top"
         isOpen={showTooltip}
-        label={selectedOption.label}
+        label={`${selectedOption.velocity.updatesPerSecond} FPS`}
       >
         <SliderThumb boxSize={6}>
           <Box as={TiMediaFastForward} />

@@ -1,23 +1,30 @@
 import ReplayManager from 'domain/interfaces/replayManager';
 
 export default function replayManager(): ReplayManager {
-  let interval: NodeJS.Timeout;
+  let interval: NodeJS.Timeout | null;
   let callback: CallableFunction | undefined;
   return {
     setCallback(fn: CallableFunction) {
       callback = fn;
     },
-    startTimer() {
+    changeVelocity(updadesPerSecond: number) {
+      if (interval) {
+        this.endTimer();
+        this.startTimer(updadesPerSecond);
+      }
+    },
+    startTimer(updatesPerSecond: number) {
       interval = setInterval(() => {
         if (callback) {
           callback();
         } else {
           throw new Error('Replay callback not set!');
         }
-      }, 300);
+      }, 1000 / updatesPerSecond);
     },
     endTimer() {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
+      interval = null;
     },
   };
 }
