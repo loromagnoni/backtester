@@ -1,9 +1,9 @@
-import assetRepository from 'dependencies/assetRepository/assetRepository';
-import chartManager from 'dependencies/chartManager/chartManager';
-import replayManager from 'dependencies/replayManager/replayManager';
+import assetRepository from 'dependencies/repositories/assetRepository/assetRepository';
+import chartManager from 'dependencies/managers/chartManager';
+import replayManager from 'dependencies/managers/replayManager';
 import useZustandStore from 'dependencies/state/zustandState';
-import timeframeRepository from 'dependencies/timeframeRepository/timeframeRepository';
-import velocityRepository from 'dependencies/velocityRepository/velocityRepository';
+import timeframeRepository from 'dependencies/repositories/timeframeRepository/timeframeRepository';
+import velocityRepository from 'dependencies/repositories/velocityRepository/velocityRepository';
 import { StateSetter } from 'domain/dependencies/state/setter';
 import State from 'domain/dependencies/state/state';
 import { createContext, ReactElement, useMemo } from 'react';
