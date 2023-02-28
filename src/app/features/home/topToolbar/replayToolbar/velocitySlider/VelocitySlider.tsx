@@ -7,7 +7,7 @@ import {
   SliderTrack,
   Tooltip,
 } from '@chakra-ui/react';
-import useChangeReplayVelocity from 'app/hooks/replay/velocity/useChangeReplayVelocity';
+import useChangeReplayVelocity from 'app/domain/replay/velocity/useChangeReplayVelocity';
 import { useState } from 'react';
 import { TiMediaFastForward } from 'react-icons/ti';
 import useVelocityOptions from './useVelocityOptions';

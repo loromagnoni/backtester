@@ -1,4 +1,4 @@
-import useSetupReplay from 'app/hooks/replay/useSetupReplay';
+import useSetupReplay from 'app/domain/replay/useSetupReplay';
 import { useEffect } from 'react';
 
 export default function useSetupReplayOnLoad() {

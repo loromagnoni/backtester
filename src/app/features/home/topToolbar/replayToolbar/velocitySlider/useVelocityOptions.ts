@@ -1,5 +1,5 @@
-import useAvailableVelocities from 'app/hooks/replay/velocity/useAvailableVelocities';
-import useReplayVelocity from 'app/hooks/replay/velocity/useReplayVelocity';
+import useAvailableVelocities from 'app/domain/replay/velocity/useAvailableVelocities';
+import useReplayVelocity from 'app/domain/replay/velocity/useReplayVelocity';
 import { useCallback, useMemo } from 'react';
 
 export default function useVelocityOptions() {

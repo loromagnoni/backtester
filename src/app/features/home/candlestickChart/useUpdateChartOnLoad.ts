@@ -1,4 +1,4 @@
-import useResetChart from 'app/hooks/chart/useResetChart';
+import useResetChart from 'app/domain/chart/useResetChart';
 import { useEffect } from 'react';
 
 export default function useUpdateChartOnLoad() {
