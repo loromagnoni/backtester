@@ -1,30 +1,23 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import './global.css';
-import HomeLayout from './features/home/HomeLayout';
 import DependencyProvider from './dependencies/DependencyProvider';
+import HomeLayout from './features/home/HomeLayout';
+import ToastRoot from './features/toast/ToastRoot';
+import './global.css';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      networkMode: 'always',
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-export enum Modal {
-  CustomizePosition,
-  EditPosition,
+function WithProviders() {
+  return (
+    <>
+      <ToastRoot />
+      <HomeLayout />;
+    </>
+  );
 }
 
-export function App() {
+export default function App() {
   return (
     <DependencyProvider>
       <ChakraProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <HomeLayout />
-        </QueryClientProvider>
+        <WithProviders />
       </ChakraProvider>
     </DependencyProvider>
   );

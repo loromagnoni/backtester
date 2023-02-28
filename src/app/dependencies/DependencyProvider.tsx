@@ -7,6 +7,7 @@ import velocityRepository from 'dependencies/repositories/velocityRepository/vel
 import { StateSetter } from 'domain/dependencies/state/setter';
 import State from 'domain/dependencies/state/state';
 import { createContext, ReactElement, useMemo } from 'react';
+import messageManager from 'dependencies/managers/messageManager';
 
 const defaultStateSetter: StateSetter = () => {};
 
@@ -16,6 +17,7 @@ const defaultDeps = {
   velocityRepository: velocityRepository(),
   chartManager: chartManager(),
   replayManager: replayManager(),
+  messageManager: messageManager(),
   state: {} as State,
   stateSetter: defaultStateSetter,
 };

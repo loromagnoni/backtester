@@ -1,5 +1,7 @@
 import ChartManager from 'domain/dependencies/managers/chartManager';
-import AssetRepository from 'domain/dependencies/repositories/assetRepository';
+import MessageManager from 'domain/dependencies/managers/messageManager';
+import AssetRepository from 'domain/dependencies/repositories/assetRepository/assetRepository';
+import SerieNotFoundError from 'domain/dependencies/repositories/assetRepository/errors';
 import { StateSetter } from 'domain/dependencies/state/setter';
 import Asset from 'domain/models/asset';
 import CandleStick from 'domain/models/candlestick';
@@ -37,6 +39,7 @@ interface ResetChartDependencies {
   startingReplayDate: Date;
   selectedAsset: Asset;
   selectedTimeframe: Timeframe;
+  messageManager: MessageManager;
   stateSetter: StateSetter;
 }
 
@@ -46,12 +49,17 @@ export default async function resetChart({
   startingReplayDate,
   selectedAsset,
   selectedTimeframe,
+  messageManager,
   stateSetter,
 }: ResetChartDependencies) {
   const serie = await assetRepository.getAssetSerie(
     selectedAsset,
     startingReplayDate
   );
+  if (serie instanceof SerieNotFoundError) {
+    messageManager.showSerieNotFoundMessage();
+    return;
+  }
   const timeframeAdapted = applyTimeframe(serie, selectedTimeframe);
   // TODO: calculate cumulative ticks, if we start from 0, the first candle of the
   // replay will be always added as new.

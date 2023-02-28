@@ -6,7 +6,8 @@ import useStartingReplayDate from '../replay/date/useStartingReplayDate';
 import useSelectedTimeframe from '../timeframe/useSelectedTimeframe';
 
 export default function useResetChart() {
-  const { assetRepository, chartManager, stateSetter } = useDependencies();
+  const { assetRepository, chartManager, stateSetter, messageManager } =
+    useDependencies();
   const startingReplayDate = useStartingReplayDate();
   const selectedAsset = useSelectedAsset();
   const selectedTimeframe = useSelectedTimeframe();
@@ -18,6 +19,7 @@ export default function useResetChart() {
         startingReplayDate,
         selectedTimeframe,
         selectedAsset,
+        messageManager,
         stateSetter,
       }),
     [
@@ -26,6 +28,7 @@ export default function useResetChart() {
       startingReplayDate,
       selectedTimeframe,
       selectedAsset,
+      messageManager,
       stateSetter,
     ]
   );

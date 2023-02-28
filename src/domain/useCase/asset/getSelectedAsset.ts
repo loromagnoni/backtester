@@ -1,4 +1,4 @@
-import AssetRepository from 'domain/dependencies/repositories/assetRepository';
+import AssetRepository from 'domain/dependencies/repositories/assetRepository/assetRepository';
 import { StateSetter } from 'domain/dependencies/state/setter';
 import { StateSlice } from 'domain/dependencies/state/state';
 import Asset from 'domain/models/asset';

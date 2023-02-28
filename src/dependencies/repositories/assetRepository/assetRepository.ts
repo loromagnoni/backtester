@@ -1,4 +1,5 @@
-import AssetRepository from 'domain/dependencies/repositories/assetRepository';
+import AssetRepository from 'domain/dependencies/repositories/assetRepository/assetRepository';
+import SerieNotFoundError from 'domain/dependencies/repositories/assetRepository/errors';
 import Asset from 'domain/models/asset';
 import CandleStick from 'domain/models/candlestick';
 import assets from './assets';
@@ -42,16 +43,20 @@ async function getRawSerie(
   asset: Asset,
   date: Date,
   cache: ReturnType<typeof serieCache>
-): Promise<CandleStick[]> {
+): Promise<CandleStick[] | SerieNotFoundError> {
   const url = `/data/${asset.label}_1m_${date.getFullYear()}${getMonthString(
     date.getMonth() + 1
   )}.json`;
   let serie = cache.getSerie(url);
   if (!serie) {
-    const data = await fetch(url);
-    const json = await data.json();
-    serie = chartAdapter(json);
-    cache.saveSerie(serie, url);
+    try {
+      const data = await fetch(url);
+      const json = await data.json();
+      serie = chartAdapter(json);
+      cache.saveSerie(serie, url);
+    } catch (e) {
+      return new SerieNotFoundError();
+    }
   }
   return serie;
 }
@@ -66,13 +71,14 @@ export default function assetRepository(): AssetRepository {
     },
     async getAssetSerie(asset, date) {
       const serie = await getRawSerie(asset, date, cache);
+      if (serie instanceof Error) return serie;
       const filtered = serie.filter(
         (candle) => onlyOpenMarketHours(candle) && beforeDate(date, candle)
       );
       return filtered;
     },
     async getCandleByMinute(asset, date) {
-      const serie = await getRawSerie(asset, date, cache);
+      const serie = (await getRawSerie(asset, date, cache)) as CandleStick[];
       const candle = serie.find((c) => c.time === date.getTime() / 1000);
       if (!candle) throw new Error('Candle not found!');
       return candle;

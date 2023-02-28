@@ -1,4 +1,4 @@
-import AssetRepository from 'domain/dependencies/repositories/assetRepository';
+import AssetRepository from 'domain/dependencies/repositories/assetRepository/assetRepository';
 
 interface GetAvailableAssetsDependencies {
   assetRepository: AssetRepository;

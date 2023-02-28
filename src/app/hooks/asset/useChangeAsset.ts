@@ -3,9 +3,11 @@ import Asset from 'domain/models/asset';
 import changeAsset from 'domain/useCase/asset/changeAsset';
 import { useCallback } from 'react';
 import useResetChart from '../chart/useResetChart';
+import useReplayDate from '../replay/date/useReplayDate';
 
 export default function useChangeAsset() {
-  const { stateSetter } = useDependencies();
+  const { stateSetter, messageManager, assetRepository } = useDependencies();
+  const replayDate = useReplayDate();
   const resetChart = useResetChart();
   return useCallback(
     (newAssetSelected: Asset) =>
@@ -13,7 +15,10 @@ export default function useChangeAsset() {
         stateSetter,
         newAssetSelected,
         resetChart,
+        messageManager,
+        assetRepository,
+        replayDate,
       }),
-    [stateSetter, resetChart]
+    [stateSetter, resetChart, messageManager, assetRepository, replayDate]
   );
 }
