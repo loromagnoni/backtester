@@ -1,5 +1,5 @@
 import assetRepository from 'dependencies/repositories/assetRepository/assetRepository';
-import chartManager from 'dependencies/managers/chartManager';
+import chartManager from 'dependencies/managers/chartManager/chartManager';
 import replayManager from 'dependencies/managers/replayManager';
 import useZustandStore from 'dependencies/state/zustandState';
 import timeframeRepository from 'dependencies/repositories/timeframeRepository/timeframeRepository';

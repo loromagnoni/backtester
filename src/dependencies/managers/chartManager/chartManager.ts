@@ -5,7 +5,7 @@ import {
   CrosshairMode,
   IChartApi,
   ISeriesApi,
-} from 'core/lightweight-chart/lightweight-charts';
+} from 'dependencies/managers/chartManager/lightweight-chart/lightweight-charts';
 import CandleStick from 'domain/models/candlestick';
 import ChartManager from 'domain/dependencies/managers/chartManager';
 import { UTCTimestamp } from 'lightweight-charts';
