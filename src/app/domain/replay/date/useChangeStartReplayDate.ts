@@ -1,4 +1,4 @@
-import useDependencies from 'app/dependencies/useDependencies';
+import useDependencies from 'app/tree/dependencies/useDependencies';
 import useIsAssetDataAvailable from 'app/domain/asset/useIsAssetDataAvailable';
 import useSelectedAsset from 'app/domain/asset/useSelectedAsset';
 import useResetChart from 'app/domain/chart/useResetChart';

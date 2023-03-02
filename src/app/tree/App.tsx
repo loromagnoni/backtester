@@ -1,8 +1,8 @@
 import { ChakraProvider, theme } from '@chakra-ui/react';
-import Dependencies from 'dependencies';
+import Dependencies from 'domain/dependencies';
 import DependencyProvider from './dependencies/DependencyProvider';
-import HomeLayout from './features/home/HomeLayout';
-import ToastRoot from './features/toast/ToastRoot';
+import HomeLayout from './home/HomeLayout';
+import ToastRoot from './toast/ToastRoot';
 import './global.css';
 
 function WithProviders() {

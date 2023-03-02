@@ -1,4 +1,4 @@
-import useDependencies from 'app/dependencies/useDependencies';
+import useDependencies from 'app/tree/dependencies/useDependencies';
 import forwardReplay from 'domain/useCase/replay/forwardReplay';
 import { useCallback } from 'react';
 import useSelectedAsset from '../asset/useSelectedAsset';

@@ -1,4 +1,4 @@
-import useDependencies from 'app/dependencies/useDependencies';
+import useDependencies from 'app/tree/dependencies/useDependencies';
 import Velocity from 'domain/models/velocity';
 import changeReplayVelocity from 'domain/useCase/replay/velocity/changeReplayVelocity';
 import { useCallback } from 'react';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
-import useDependencies from 'app/dependencies/useDependencies';
+import useDependencies from 'app/tree/dependencies/useDependencies';
 
 export default function ToastRoot() {
   const { messageManager } = useDependencies();

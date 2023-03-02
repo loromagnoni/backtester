@@ -8,7 +8,7 @@ import { StateSetter } from 'domain/dependencies/state/setter';
 import State from 'domain/dependencies/state/state';
 import { createContext, ReactElement, useMemo } from 'react';
 import messageManager from 'dependencies/managers/messageManager';
-import Dependencies from 'dependencies';
+import Dependencies from 'domain/dependencies';
 
 const defaultStateSetter: StateSetter = () => {};
 

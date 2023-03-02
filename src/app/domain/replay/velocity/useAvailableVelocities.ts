@@ -1,4 +1,4 @@
-import useDependencies from 'app/dependencies/useDependencies';
+import useDependencies from 'app/tree/dependencies/useDependencies';
 import getAvailableVelocities from 'domain/useCase/replay/velocity/getAvailableVelocities';
 import { useMemo } from 'react';
 
