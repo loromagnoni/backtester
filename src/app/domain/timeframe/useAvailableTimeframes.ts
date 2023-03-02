@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import getAvailableTimeframes from 'domain/useCase/timeframe/getAvailableTimeframes';
 import { useMemo } from 'react';
 

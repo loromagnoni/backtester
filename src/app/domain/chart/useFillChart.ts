@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import fillChart from 'domain/useCase/chart/fillChart';
 import { useCallback } from 'react';
 

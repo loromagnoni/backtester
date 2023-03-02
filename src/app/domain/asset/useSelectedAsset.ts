@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import getSelectedAsset from 'domain/useCase/asset/getSelectedAsset';
 import { useMemo } from 'react';
 

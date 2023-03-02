@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import Asset from 'domain/models/asset';
 import changeAsset from 'domain/useCase/asset/changeAsset';
 import { useCallback } from 'react';

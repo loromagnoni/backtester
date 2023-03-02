@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from 'app/App';
+import App from 'app/tree/App';
 import assetRepository from 'dependencies/repositories/assetRepository/assetRepository';
 import SerieNotFoundError from 'domain/dependencies/repositories/assetRepository/errors';
 import Asset from 'domain/models/asset';

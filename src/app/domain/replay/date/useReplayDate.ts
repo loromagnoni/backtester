@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import getReplayDate from 'domain/useCase/replay/date/getReplayDate';
 import { useMemo } from 'react';
 

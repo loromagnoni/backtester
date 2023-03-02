@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import { useEffect, useRef } from 'react';
 
 export default function useCandleStickChartModel() {

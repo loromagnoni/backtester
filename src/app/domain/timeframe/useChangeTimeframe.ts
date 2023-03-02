@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import changeTimeframe from 'domain/useCase/timeframe/changeTimeframe';
 import { useCallback } from 'react';
 import useResetChart from '../chart/useResetChart';

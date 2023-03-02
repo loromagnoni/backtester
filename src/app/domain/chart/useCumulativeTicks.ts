@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import getCumulativeTicks from 'domain/useCase/chart/getCumulativeTicks';
 import { useMemo } from 'react';
 

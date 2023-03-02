@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import isAssetDataAvailable from 'domain/useCase/asset/isAssetDataAvailable';
 import { useMemo } from 'react';
 

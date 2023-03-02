@@ -1,4 +1,4 @@
-import useDependencies from 'app/tree/dependencies/useDependencies';
+import useDependencies from 'app/dependencies/useDependencies';
 import toggleReplayActivation from 'domain/useCase/replay/toggleReplayActivation';
 import { useCallback } from 'react';
 import useIsReplaying from './useGetIsReplaying';
