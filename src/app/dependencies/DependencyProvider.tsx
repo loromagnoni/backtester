@@ -8,6 +8,7 @@ import { StateSetter } from 'domain/dependencies/state/setter';
 import State from 'domain/dependencies/state/state';
 import { createContext, ReactElement, useMemo } from 'react';
 import messageManager from 'dependencies/managers/messageManager';
+import Dependencies from 'dependencies';
 
 const defaultStateSetter: StateSetter = () => {};
 
@@ -24,18 +25,27 @@ const defaultDeps = {
 
 export const DependenciesContext = createContext(defaultDeps);
 
+interface DependencyProviderProps {
+  children: ReactElement;
+  dependencies: Partial<Dependencies>;
+}
+
 export default function DependencyProvider({
   children,
-}: {
-  children: ReactElement;
-}) {
+  dependencies,
+}: DependencyProviderProps) {
   const store = useZustandStore();
-  const dependencies = useMemo(
-    () => ({ ...defaultDeps, state: store.values, stateSetter: store.setter }),
-    [store.setter, store.values]
+  const depsInContext = useMemo(
+    () => ({
+      ...defaultDeps,
+      state: store.values,
+      stateSetter: store.setter,
+      ...dependencies,
+    }),
+    [dependencies, store.setter, store.values]
   );
   return (
-    <DependenciesContext.Provider value={dependencies}>
+    <DependenciesContext.Provider value={depsInContext}>
       {children}
     </DependenciesContext.Provider>
   );

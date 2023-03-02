@@ -9,11 +9,14 @@ function AssetSelector() {
   const selectedAsset = useSelectedAsset();
   return (
     <Select
+      data-testid="asset-selector"
       placeholder="Select asset"
       minW={40}
       variant="outline"
       value={selectedAsset.label}
-      onChange={(e) => changeAsset({ label: e.target.value })}
+      onChange={(e) => {
+        changeAsset({ label: e.target.value });
+      }}
     >
       {availableAssets.map((asset) => (
         <option key={asset.label} value={asset.label}>
